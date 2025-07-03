@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ThemesView: View {
-    @State private var model = MangaViewModel(repository: Repository())
+    @Environment(MangaViewModel.self) var model
     
     var body: some View {
         NavigationStack {
@@ -16,22 +16,21 @@ struct ThemesView: View {
                 ForEach(model.themes, id: \.self) { theme in
                     NavigationLink(destination: Text(theme)) {
                         Text(theme)
-                            .font(.headline)
                             .foregroundColor(.primary)
                     }
                 }
             }
             .navigationTitle(Text("Themes"))
-            .task {
-                await model.getThemes()
-            }
-            .refreshable {
-                await model.getThemes()
-            }
         }
     }
 }
 
 #Preview {
+    @Previewable @State var model = MangaViewModel()
+    
     ThemesView()
+        .task {
+            model.loadInitialData()
+        }
+        .environment(model)
 }

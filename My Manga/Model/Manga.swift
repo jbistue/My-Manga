@@ -7,13 +7,17 @@
 
 import Foundation
 
+//struct MangaResponse: Codable {
+//    let results: [Manga]
+//}
+
 // MARK: - Manga
-struct Manga: Codable {
+struct Manga: Codable, Identifiable {
     let id: Int
     let title, titleEnglish, titleJapanese: String?
     let startDate: Date
     let endDate: Date?
-    let status: String? // Status
+    let status: Status
     let chapters, volumes: Int?
     let score: Double
     let sypnosis: String
@@ -27,21 +31,33 @@ struct Manga: Codable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self, forKey: .id)
-        self.title = try container.decode(String.self, forKey: .title)
-        self.titleEnglish = try container.decode(String.self, forKey: .titleEnglish)
-        self.titleJapanese = try container.decode(String.self, forKey: .titleJapanese)
-        self.startDate = try container.decode(Date.self, forKey: .startDate)
-        self.endDate = try container.decode(Date.self, forKey: .endDate)
-        self.status = try container.decode(String.self, forKey: .status)
-        self.chapters = try container.decode(Int.self, forKey: .chapters)
-        self.volumes = try container.decode(Int.self, forKey: .volumes)
+        self.title = try container.decodeIfPresent(String.self, forKey: .title)
+        self.titleEnglish = try container.decodeIfPresent(String.self, forKey: .titleEnglish)
+        self.titleJapanese = try container.decodeIfPresent(String.self, forKey: .titleJapanese)
+        self.status = try container.decode(Status.self, forKey: .status)
+        self.chapters = try container.decodeIfPresent(Int.self, forKey: .chapters)
+        self.volumes = try container.decodeIfPresent(Int.self, forKey: .volumes)
         self.score = try container.decode(Double.self, forKey: .score)
         self.sypnosis = try container.decode(String.self, forKey: .sypnosis)
-        self.background = try container.decode(String.self, forKey: .background)
+        self.background = try container.decodeIfPresent(String.self, forKey: .background)
         self.themes = try container.decode([Theme].self, forKey: .themes)
         self.genres = try container.decode([Gender].self, forKey: .genres)
         self.demographics = try container.decode([Demographic].self, forKey: .demographics)
         self.authors = try container.decode([Author].self, forKey: .authors)
+        
+        let formatter = ISO8601DateFormatter()
+        
+        self.startDate = if let startDateString = try? container.decode(String.self, forKey: .startDate) {
+            formatter.date(from: startDateString) ?? Date()
+        } else {
+            Date()
+        }
+        
+        self.endDate = if let endDateString = try? container.decodeIfPresent(String.self, forKey: .endDate) {
+            formatter.date(from: endDateString)
+        } else {
+            nil
+        }
         
         self.url = if let url = try container.decodeIfPresent(String.self, forKey: .url)?.trimmingCharacters(in: CharacterSet(charactersIn: "\"")) {
             URL(string: url)
@@ -74,20 +90,48 @@ extension Manga {
     }
     
     // MARK: Status
-//    enum Status: String, Codable {
-//        case currentlyPublishing = "currently_publishing"
-//        case finished = "finished"
-//    }
+    enum Status: String, Codable {
+        case currentlyPublishing = "currently_publishing"
+        case finished
+        case onHiatus = "on_hiatus"
+        case cancelled
+        case unknown
+
+        init(rawValue: String) {
+            switch rawValue {
+            case "currently_publishing":
+                self = .currentlyPublishing
+            case "finished":
+                self = .finished
+            case "on_hiatus":
+                self = .onHiatus
+            case "cancelled":
+                self = .cancelled
+            default:
+                self = .unknown
+            }
+        }
+
+        var description: String {
+            switch self {
+            case .currentlyPublishing: String(localized: "Currently Publishing")
+            case .finished: String(localized: "Finished")
+            case .onHiatus: String(localized: "On Hiatus")
+            case .cancelled: String(localized: "Cancelled")
+            case .unknown: String(localized: "Unknown")
+            }
+        }
+    }
 }
 
 // MARK: - Author
-struct Author: Codable {
+struct Author: Codable, Hashable, Identifiable {
     let id, firstName, lastName, role: String
 }
 
 // MARK: -
 struct Mangas: Codable {
-    let mangas: [Manga]
+    let items: [Manga]
     let metadata: Metadata
 }
 

@@ -8,17 +8,17 @@
 import SwiftUI
 
 @Observable
+@MainActor
 final class MangaViewModel {
-    private let repository: NetworkRepository // = NetworkRepository()
+    private let repository: NetworkRepository
+    private let loader = MangaDataLoader()
     
-//    var artObjectIDs: [Int] = []
-//    var mangas: [Manga] = []
+    var demographics = [String]()
+    var genres = [String]()
+    var themes = [String]()
+    var authors = [Author]()
     var manga: Manga? = nil
-    var themes: [String] = []
-    var genres: [String] = []
-    var demographics: [String] = []
-    var mangas: Mangas = Mangas(mangas: [], metadata: Metadata(total: 0, per: 0, page: 0))
-//    var artObject: ArtObject?
+    var mangas = Mangas(items: [], metadata: Metadata(total: 0, per: 0, page: 0))
     
     // var isAlertPresented = false
     var errorMessage: String?
@@ -26,52 +26,65 @@ final class MangaViewModel {
     init(repository: NetworkRepository = Repository()) {
         self.repository = repository
     }
+    
+    func loadInitialData() {
+        Task {
+            do {
+                async let demographics = loader.getDemographics()
+                async let genres = loader.getGenres()
+                async let themes = loader.getThemes()
+                async let authors = loader.getAuthors()
+
+                self.demographics = try await demographics
+                self.genres = try await genres
+                self.themes = try await themes
+                self.authors = try await authors
+            } catch {
+                errorMessage = error.localizedDescription
+            }
+        }
+    }
 }
 
 @MainActor
 extension MangaViewModel {
-//    func getMangas() async {
-//        print("aquí estoy ...")
-//        do {
-//            mangas = try await repository.getMangas(page: 1, per: 10)
-//            // print("Mangas obtenidos: \(mangas)")
-//            // print("Mangas obtenidos ...")
-//        } catch {
-//            errorMessage = error.localizedDescription
-//        }
-//        print("Mangas obtenidos ...")
-//    }
+    func getMangas() async {
+        do {
+            mangas = try await repository.getMangas(page: 1, per: 30)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
     
     func getMangaDetail(id: Int) async {
         do {
-            manga = try await repository.getDetail(manga: id)
+            manga = try await repository.getMangaDetail(manga: id)
         } catch {
             errorMessage = error.localizedDescription
         }
     }
     
-    func getThemes() async {
-        do {
-            themes = try await repository.getThemes().sorted(by: <)
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-    
-    func getGenres() async {
-        do {
-            genres = try await repository.getGenres().sorted(by: <)
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-        
-    func getDemographics() async {
-        do {
-            demographics = try await repository.getDemographics().sorted(by: <)
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
+//    func getThemes() async {
+//        do {
+//            themes = try await repository.getThemes().sorted(by: <)
+//        } catch {
+//            errorMessage = error.localizedDescription
+//        }
+//    }
+//    
+//    func getGenres() async {
+//        do {
+//            genres = try await repository.getGenres().sorted(by: <)
+//        } catch {
+//            errorMessage = error.localizedDescription
+//        }
+//    }
+//        
+//    func getDemographics() async {
+//        do {
+//            demographics = try await repository.getDemographics().sorted(by: <)
+//        } catch {
+//            errorMessage = error.localizedDescription
+//        }
+//    }
 }
-    

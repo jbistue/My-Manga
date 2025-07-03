@@ -10,6 +10,8 @@ import SwiftData
 
 @main
 struct My_MangaApp: App {
+    @State private var model = MangaViewModel(repository: Repository())
+
 //    var sharedModelContainer: ModelContainer = {
 //        let schema = Schema([
 //            Item.self,
@@ -23,10 +25,30 @@ struct My_MangaApp: App {
 //        }
 //    }()
 
+    init() {
+        model.loadInitialData()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(model)
         }
 //        .modelContainer(sharedModelContainer)
     }
+    
+//    func loadData(_ container: ModelContainer) async {
+//        // let container = MangaContainer(modelContainer: container)
+//        let container = MangaContainer()
+//        mangaModel.container = container
+//        
+//        do {
+//            // mangaModel.state = .loading
+//            try await container.loadInitialData()
+//            // mangaModel.state = .loaded
+//        } catch {
+//            print("Error loading initial data: \(error)")
+//            // mangaModel.state = .error(error)
+//        }
+//    }
 }

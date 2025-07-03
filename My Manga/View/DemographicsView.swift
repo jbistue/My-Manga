@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DemographicsView: View {
-    @State private var model = MangaViewModel(repository: Repository())
+    @Environment(MangaViewModel.self) var model
     
     var body: some View {
         NavigationStack {
@@ -16,22 +16,21 @@ struct DemographicsView: View {
                 ForEach(model.demographics, id: \.self) { demographic in
                     NavigationLink(destination: Text(demographic)) {
                         Text(demographic)
-                            .font(.headline)
                             .foregroundColor(.primary)
                     }
                 }
             }
             .navigationTitle(Text("Demographics"))
-            .task {
-                await model.getDemographics()
-            }
-            .refreshable {
-                await model.getDemographics()
-            }
         }
     }
 }
 
 #Preview {
+    @Previewable @State var model = MangaViewModel()
+    
     DemographicsView()
+        .task {
+            model.loadInitialData()
+        }
+        .environment(model)
 }

@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct MangaDetailView: View {
-    @State private var model = MangaViewModel(repository: Repository())
+    let manga: Manga
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                AsyncImage(url: model.manga?.mainPicture) { image in
+                AsyncImage(url: manga.mainPicture) { image in
                     image
                         .resizable()
                         .scaledToFit()
@@ -24,50 +24,45 @@ struct MangaDetailView: View {
                 .cornerRadius(10)
                 .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
                 .padding()
-                
-                Text("**Title:** \(model.manga?.title ?? "N/A")")
+
+                Text("**English title:** \(manga.titleEnglish ?? "N/A")")
                     .padding(.bottom, 2)
-                Text("**English title:** \(model.manga?.titleEnglish ?? "N/A")")
+                Text("**Japanese title:** \(manga.titleJapanese ?? "N/A")")
                     .padding(.bottom, 2)
-                Text("**Japanese title:** \(model.manga?.titleJapanese ?? "N/A")")
+                Text("**Start:** \(manga.startDate.formatted(date: .abbreviated, time: .omitted))")
                     .padding(.bottom, 2)
-                Text("**Start:** \(model.manga?.startDate.formatted(date: .abbreviated, time: .omitted) ?? "N/A")")
+                Text("**End:** \(manga.endDate?.formatted(date: .abbreviated, time: .omitted) ?? "N/A")")
                     .padding(.bottom, 2)
-                Text("**End:** \(model.manga?.endDate?.formatted(date: .abbreviated, time: .omitted) ?? "N/A")")
+                Text("**Status:** \(manga.status.description)")
                     .padding(.bottom, 2)
-                Text("**Status:** \(model.manga?.status ?? "N/A")")
+                Text("**Chapters:** \(String(manga.chapters ?? 0))")
                     .padding(.bottom, 2)
-                Text("**Chapters:** \(String(model.manga?.chapters ?? 0))")
+                Text("**Volumes:** \(String(manga.volumes ?? 0))")
                     .padding(.bottom, 2)
-                Text("**Volumes:** \(String(model.manga?.volumes ?? 0))")
+                Text("**Score:** \(String(manga.score))")
                     .padding(.bottom, 2)
-                Text("**Score:** \(String(model.manga?.score ?? 0))")
+                Text("**Background:** \(manga.background ?? "N/A")")
                     .padding(.bottom, 2)
-                Text("**Background:** \(model.manga?.background ?? "N/A")")
+                Text("**Synopsis:** \(manga.sypnosis)")
                     .padding(.bottom, 2)
-                Text("**Synopsis:** \(model.manga?.sypnosis ?? "N/A")")
+                Text("**Themes:** \(manga.themes.map { $0.theme }.joined(separator: ", "))")
                     .padding(.bottom, 2)
-                Text("**Themes:** \(model.manga?.themes.map { $0.theme }.joined(separator: ", ") ?? "No themes")")
+                Text("**Genres:** \(manga.genres.map { $0.genre }.joined(separator: ", "))")
                     .padding(.bottom, 2)
-                Text("**Genres:** \(model.manga?.genres.map { $0.genre }.joined(separator: ", ") ?? "No genres")")
+                Text("**Demographics:** \(manga.demographics.map { $0.demographic }.joined(separator: ", "))")
                     .padding(.bottom, 2)
-                Text("**Demographics:** \(model.manga?.demographics.map { $0.demographic }.joined(separator: ", ") ?? "No demographics")")
+                Text("**Authors:** \(manga.authors.map { "\($0.firstName) \($0.lastName) (\($0.role))" }.joined(separator: ", "))")
                     .padding(.bottom, 2)
-                Text("**Authors:** \(model.manga?.authors.map { "\($0.firstName) \($0.lastName) (\($0.role))" }.joined(separator: ", ") ?? "No authors")")
-                    .padding(.bottom, 2)
-                Text("**URL:** \(model.manga?.url?.absoluteString ?? "N/A")")
+                Link("\(manga.url?.absoluteString ?? "N/A")", destination: manga.url ?? URL(string: "")!)
                     .padding(.bottom, 2)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
-            .navigationTitle("Manga Detail")
-            .task {
-                await model.getMangaDetail(id: 42)
-            }
+            .navigationTitle(manga.title ?? "N/A")
         }
     }
 }
 
 #Preview {
-    MangaDetailView()
+    MangaDetailView(manga: .preview)
 }

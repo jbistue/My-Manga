@@ -19,8 +19,8 @@ enum NetworkError: LocalizedError {
         case .general(let error): String(localized: "General: \(error.localizedDescription)")
         case .status(let code): String(localized: "HTTP status code: \(code)")
         case .json(let error): String(localized: "JSON error: \(error.localizedDescription)")
-        case .dataNotValid: "Invalid data received from server"
-        case .nonHTTP: "URLSession did not return an HTTP URLResponse"
+        case .dataNotValid: String(localized: "Invalid data received from server")
+        case .nonHTTP: String(localized: "URLSession did not return an HTTP URLResponse")
         }
     }
 }
