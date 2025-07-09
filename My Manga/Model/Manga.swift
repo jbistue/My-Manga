@@ -34,6 +34,8 @@ struct Manga: Codable, Identifiable {
         self.title = try container.decodeIfPresent(String.self, forKey: .title)
         self.titleEnglish = try container.decodeIfPresent(String.self, forKey: .titleEnglish)
         self.titleJapanese = try container.decodeIfPresent(String.self, forKey: .titleJapanese)
+        self.startDate = try container.decode(Date.self, forKey: .startDate)
+        self.endDate = try container.decodeIfPresent(Date.self, forKey: .endDate)
         self.status = try container.decode(Status.self, forKey: .status)
         self.chapters = try container.decodeIfPresent(Int.self, forKey: .chapters)
         self.volumes = try container.decodeIfPresent(Int.self, forKey: .volumes)
@@ -44,20 +46,6 @@ struct Manga: Codable, Identifiable {
         self.genres = try container.decode([Gender].self, forKey: .genres)
         self.demographics = try container.decode([Demographic].self, forKey: .demographics)
         self.authors = try container.decode([Author].self, forKey: .authors)
-        
-        let formatter = ISO8601DateFormatter()
-        
-        self.startDate = if let startDateString = try? container.decode(String.self, forKey: .startDate) {
-            formatter.date(from: startDateString) ?? Date()
-        } else {
-            Date()
-        }
-        
-        self.endDate = if let endDateString = try? container.decodeIfPresent(String.self, forKey: .endDate) {
-            formatter.date(from: endDateString)
-        } else {
-            nil
-        }
         
         self.url = if let url = try container.decodeIfPresent(String.self, forKey: .url)?.trimmingCharacters(in: CharacterSet(charactersIn: "\"")) {
             URL(string: url)

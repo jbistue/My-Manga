@@ -1,6 +1,19 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "-" : {
+
+    },
+    "(%lld/%lld)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "(%1$lld/%2$lld)"
+          }
+        }
+      }
+    },
     "[#%lld] %@" : {
       "localizations" : {
         "en" : {
@@ -159,8 +172,18 @@
         }
       }
     },
-    "%@" : {
+    "# %lld" : {
 
+    },
+    "%@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@"
+          }
+        }
+      }
     },
     "%@, %@ *(%@)*" : {
       "localizations" : {
@@ -169,8 +192,17 @@
             "state" : "new",
             "value" : "%1$@, %2$@ *(%3$@)*"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, %2$@ *(%3$@)*"
+          }
         }
       }
+    },
+    "%lld" : {
+
     },
     "Authors" : {
       "extractionState" : "manual",
@@ -193,6 +225,9 @@
           }
         }
       }
+    },
+    "Completed" : {
+
     },
     "Currently Publishing" : {
       "extractionState" : "manual",
@@ -279,6 +314,16 @@
         }
       }
     },
+    "Invalid data received from server" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos no válidos recibidos del servidor"
+          }
+        }
+      }
+    },
     "JSON error: %@" : {
       "localizations" : {
         "es" : {
@@ -309,6 +354,9 @@
           }
         }
       }
+    },
+    "Not Completed" : {
+
     },
     "On Hiatus" : {
       "extractionState" : "manual",
@@ -354,6 +402,17 @@
         }
       }
     },
+    "There is no Manga in the library." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No hay ningún Manga en la biblioteca."
+          }
+        }
+      }
+    },
     "Unknown" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -361,6 +420,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Desconocido"
+          }
+        }
+      }
+    },
+    "URLSession did not return an HTTP URLResponse" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "URLSession no devolvió una URLResponse HTTP"
           }
         }
       }

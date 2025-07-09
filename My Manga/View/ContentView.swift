@@ -17,14 +17,13 @@ struct ContentView: View {
     var body: some View {
         TabView {
             // Tab("Home", systemImage: "house") {
-            Tab("Mangas", systemImage: "house") {
+            Tab("Mangas", systemImage: "house.fill") {
                 MangaListView()
                     .navigationBarTitle("Home")
             }
             
-            // Tab("Library", systemImage: "books.vertical.fill") {
-            Tab("Demographics", systemImage: "books.vertical.fill") {
-                DemographicsView()
+            Tab("Library", systemImage: "books.vertical.fill") {
+                LibraryView()
                     .navigationBarTitle("Library")
             }
             

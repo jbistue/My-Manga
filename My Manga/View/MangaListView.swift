@@ -36,7 +36,6 @@ struct MangaListView: View {
     
     MangaListView()
         .task {
-//            await model.loadInitialData()
             await model.getMangas()
         }
         .environment(model)
