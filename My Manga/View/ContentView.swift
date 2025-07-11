@@ -9,52 +9,55 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(MangaViewModel.self) var model
     @Namespace private var namespace
-//    @Environment(\.modelContext) private var modelContext
+    
 //    @Query private var items: [Item]
 
     var body: some View {
         TabView {
-            // Tab("Home", systemImage: "house") {
-            Tab("Mangas", systemImage: "house.fill") {
-                MangasView(namespace: namespace)
-                // MangaListView()
-                    .navigationBarTitle("Home")
-            }
-            
             Tab("Library", systemImage: "books.vertical.fill") {
                 LibraryView()
                     .navigationBarTitle("Library")
             }
             
-            // Tab("Search", systemImage: "magnifyingglass", role: .search) {
-            Tab("Genres", systemImage: "magnifyingglass") {
-                GenresView()
-                    .navigationBarTitle("Search")
+            // Tab("Home", systemImage: "house.fill") {
+            Tab("Store", systemImage: "bag.fill") {
+                StoreView(namespace: namespace)
+                // MangaListView()
+                    .navigationBarTitle("Store")
             }
             
-            Tab("Themes", systemImage: "person.2.fill") {
-                ThemesView()
-                    .navigationBarTitle("Themes")
-            }
-            
-            // Tab("Settings", systemImage: "gear") {
-            Tab("Authors", systemImage: "bag.fill") {
-                AuthorsView()
-                    .navigationBarTitle("Settings")
-            }
+//            // Tab("Search", systemImage: "magnifyingglass", role: .search) {
+//            Tab("Genres", systemImage: "magnifyingglass") {
+//                GenresView()
+//                    .navigationBarTitle("Search")
+//            }
+//            
+//            Tab("Themes", systemImage: "person.2.fill") {
+//                ThemesView()
+//                    .navigationBarTitle("Themes")
+//            }
+//            
+//            // Tab("Settings", systemImage: "gear") {
+//            Tab("Authors", systemImage: "gear") {
+//                AuthorsView()
+//                    .navigationBarTitle("Settings")
+//            }
         }
+        .tabViewStyle(.sidebarAdaptable)
     }
 }
 
-#Preview {
+#Preview(traits: .sampleData) {
+//#Preview {
     @Previewable @State var model = MangaViewModel()
     
     ContentView()
-        .task {
-            model.loadInitialData()
-        }
+//        .task {
+//            model.loadInitialData()
+//        }
         .environment(model)
 //        .modelContainer(for: Item.self, inMemory: true)
 }

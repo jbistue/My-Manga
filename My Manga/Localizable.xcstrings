@@ -327,17 +327,6 @@
         }
       }
     },
-    "Hello, World!" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¡Hola, Mundo!"
-          }
-        }
-      }
-    },
     "Home" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -459,6 +448,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ajustes"
+          }
+        }
+      }
+    },
+    "Store" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tienda"
           }
         }
       }

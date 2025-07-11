@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 enum CollectionStatus: LocalizedStringResource, CaseIterable, Identifiable {
     case reading = "Reading"
@@ -16,16 +17,21 @@ enum CollectionStatus: LocalizedStringResource, CaseIterable, Identifiable {
 }
 
 struct LibraryView: View {
+    @Environment(\.modelContext) private var modelContext
     @Environment(MangaViewModel.self) var model
     
-    @State private var mangas: [LibraryItem] = []
+//    @Query private var libraryItems: [LibraryItemDB]
+    @Query private var mangas: [LibraryItemDB]
+    
+//    @State private var mangas: [LibraryItem] = []
     @State private var detailsDict: [Int: Manga] = [:]
     @State private var selectedCollectionStatus: CollectionStatus = .reading
    
     @Namespace private var namespace
     @Namespace private var segmentedControl
     
-    var mangasFiltered: [LibraryItem] {
+//    var mangasFiltered: [LibraryItem] {
+    var mangasFiltered: [LibraryItemDB] {
         switch selectedCollectionStatus {
         case .reading:
             return mangas.filter { $0.readingVolume != nil }
@@ -100,9 +106,9 @@ struct LibraryView: View {
             .clipShape(.capsule)
             .buttonStyle(.plain)
         }
-        .onAppear {
-            mangas = loadLibraryItems()
-        }
+//        .onAppear {
+//            mangas = loadLibraryItems()
+//        }
         .overlay {
             if mangas.isEmpty {
                 ContentUnavailableView {
@@ -117,9 +123,11 @@ struct LibraryView: View {
     }
 }
 
-#Preview {
+#Preview(traits: .sampleData) {
+//#Preview() {
     @Previewable @State var model = MangaViewModel()
     
     LibraryView()
         .environment(model)
+//        .modelContainer(for: LibraryItemDB.self, inMemory: true)
 }

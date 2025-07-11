@@ -52,6 +52,16 @@ struct MangaDetailView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
             .navigationTitle(manga.title ?? "N/A")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+//                        isFormPresented = true
+                    } label: {
+                        Image(systemName: "square.and.arrow.down")
+                            .font(.title3)
+                    }
+                }
+            }
         }
     }
     

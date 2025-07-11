@@ -12,18 +12,16 @@ import SwiftData
 struct My_MangaApp: App {
     @State private var model = MangaViewModel(repository: Repository())
 
-//    var sharedModelContainer: ModelContainer = {
-//        let schema = Schema([
-//            Item.self,
-//        ])
-//        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-//
-//        do {
-//            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-//        } catch {
-//            fatalError("Could not create ModelContainer: \(error)")
-//        }
-//    }()
+    var sharedModelContainer: ModelContainer = {
+        let schema = Schema([LibraryItemDB.self,])
+        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
+
+        do {
+            return try ModelContainer(for: schema, configurations: [modelConfiguration])
+        } catch {
+            fatalError("Could not create ModelContainer: \(error)")
+        }
+    }()
 
     init() {
         model.loadInitialData()
@@ -34,7 +32,7 @@ struct My_MangaApp: App {
             ContentView()
                 .environment(model)
         }
-//        .modelContainer(sharedModelContainer)
+        .modelContainer(sharedModelContainer)
     }
     
 //    func loadData(_ container: ModelContainer) async {

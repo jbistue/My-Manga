@@ -1,5 +1,5 @@
 //
-//  MangasView.swift
+//  StoreView.swift
 //  My Manga
 //
 //  Created by Javier Bistue on 9/7/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MangasView: View {
+struct StoreView: View {
     @Environment(MangaViewModel.self) var model
 //    @Query private var movies: [Movie]
 //    let libraryItems: [LibraryItem] // = []
@@ -42,12 +42,22 @@ struct MangasView: View {
                     .task {
                         await model.getMangas()
                     }
+                    .toolbar {
+                        ToolbarItem(placement: .topBarTrailing) {
+                            Button {
+            //                    isFormPresented = true
+                            } label: {
+                                Image(systemName: "line.3.horizontal.decrease.circle")
+                                    .font(.title3)
+                            }
+                        }
+                    }
                 }
             }
             .safeAreaPadding()
             //        .animation(.easeInOut, value: selectedMovieType)
             //        .navigationTitle(Text(selectedMovieType.rawValue))
-                    .navigationTitle(Text("Mangas"))
+                    .navigationTitle(Text("Store"))
             .navigationDestination(for: Manga.self) { manga in
                 MangaDetailView(manga: manga)
                     .navigationTransition(.zoom(sourceID: "cover_\(manga.id)", in: namespace))
@@ -65,7 +75,7 @@ struct MangasView: View {
     @Previewable @State var model = MangaViewModel()
     @Previewable @Namespace var namespace
     
-    MangasView(namespace: namespace)
+    StoreView(namespace: namespace)
         .task {
             await model.getMangas()
         }
