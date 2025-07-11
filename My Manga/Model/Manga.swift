@@ -12,7 +12,7 @@ import Foundation
 //}
 
 // MARK: - Manga
-struct Manga: Codable, Identifiable {
+struct Manga: Codable, Identifiable, Hashable {
     let id: Int
     let title, titleEnglish, titleJapanese: String?
     let startDate: Date
@@ -63,17 +63,17 @@ struct Manga: Codable, Identifiable {
 
 extension Manga {
     // MARK: - Demographic
-    struct Demographic: Codable {
+    struct Demographic: Codable, Hashable {
         let id, demographic: String
     }
     
     // MARK: - Gender
-    struct Gender: Codable {
+    struct Gender: Codable, Hashable {
         let id, genre: String
     }
     
     // MARK: - Theme
-    struct Theme: Codable {
+    struct Theme: Codable, Hashable {
         let id, theme: String
     }
     

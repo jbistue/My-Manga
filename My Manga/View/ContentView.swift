@@ -10,7 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(MangaViewModel.self) var model
-    
+    @Namespace private var namespace
 //    @Environment(\.modelContext) private var modelContext
 //    @Query private var items: [Item]
 
@@ -18,7 +18,8 @@ struct ContentView: View {
         TabView {
             // Tab("Home", systemImage: "house") {
             Tab("Mangas", systemImage: "house.fill") {
-                MangaListView()
+                MangasView(namespace: namespace)
+                // MangaListView()
                     .navigationBarTitle("Home")
             }
             
@@ -39,7 +40,7 @@ struct ContentView: View {
             }
             
             // Tab("Settings", systemImage: "gear") {
-            Tab("Authors", systemImage: "gear") {
+            Tab("Authors", systemImage: "bag.fill") {
                 AuthorsView()
                     .navigationBarTitle("Settings")
             }

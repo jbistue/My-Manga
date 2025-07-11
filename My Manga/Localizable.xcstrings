@@ -2,13 +2,26 @@
   "sourceLanguage" : "en",
   "strings" : {
     "-" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "-"
+          }
+        }
+      }
     },
     "(%lld/%lld)" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "(%1$lld/%2$lld)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "(%1$lld/%2$lld)"
           }
         }
@@ -173,7 +186,14 @@
       }
     },
     "# %lld" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "# %lld"
+          }
+        }
+      }
     },
     "%@" : {
       "localizations" : {
@@ -202,7 +222,14 @@
       }
     },
     "%lld" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
     },
     "Authors" : {
       "extractionState" : "manual",
@@ -226,8 +253,25 @@
         }
       }
     },
+    "Complete" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completa"
+          }
+        }
+      }
+    },
     "Completed" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completada"
+          }
+        }
+      }
     },
     "Currently Publishing" : {
       "extractionState" : "manual",
@@ -284,6 +328,7 @@
       }
     },
     "Hello, World!" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -310,6 +355,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Código estado HTTP: %lld"
+          }
+        }
+      }
+    },
+    "Incomplete" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incompleta"
           }
         }
       }
@@ -356,7 +411,14 @@
       }
     },
     "Not Completed" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No completada"
+          }
+        }
+      }
     },
     "On Hiatus" : {
       "extractionState" : "manual",
@@ -365,6 +427,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "En pausa"
+          }
+        }
+      }
+    },
+    "Reading" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leyendo"
           }
         }
       }

@@ -21,13 +21,13 @@
         "id": 8,
         "completeCollection": true,
         "volumesOwned": [1, 2, 3, 4, 5, 6, 7],
-        "readingVolume": 7
+        "readingVolume": null
     },
     {
         "id": 9,
         "completeCollection": false,
         "volumesOwned": [8, 9, 10, 11, 12],
-        "readingVolume": null
+        "readingVolume": 8
     },
     {
         "id": 11,

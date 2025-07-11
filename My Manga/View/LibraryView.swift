@@ -7,15 +7,38 @@
 
 import SwiftUI
 
+enum CollectionStatus: LocalizedStringResource, CaseIterable, Identifiable {
+    case reading = "Reading"
+    case complete = "Complete"
+    case incomplete = "Incomplete"
+    
+    var id: Self { self }
+}
+
 struct LibraryView: View {
     @Environment(MangaViewModel.self) var model
     
     @State private var mangas: [LibraryItem] = []
     @State private var detailsDict: [Int: Manga] = [:]
+    @State private var selectedCollectionStatus: CollectionStatus = .reading
+   
+    @Namespace private var namespace
+    @Namespace private var segmentedControl
+    
+    var mangasFiltered: [LibraryItem] {
+        switch selectedCollectionStatus {
+        case .reading:
+            return mangas.filter { $0.readingVolume != nil }
+        case .complete:
+            return mangas.filter { $0.completeCollection }
+        case .incomplete:
+            return mangas.filter { !$0.completeCollection }
+        }
+    }
     
     var body: some View {
         NavigationStack {
-            List(mangas) { manga in
+            List(mangasFiltered) { manga in
                 VStack(alignment: .leading) {
                     HStack {
                         Text("# \(manga.id)")
@@ -40,15 +63,42 @@ struct LibraryView: View {
                     
                     Text(manga.readingVolume.map { "\($0)" } ?? "-")
                         .font(.caption)
-                    
-                    
                 }
                 .task {
                     await model.getMangaDetail(id: manga.id)
                     detailsDict[manga.id] = model.manga
                 }
+                //.safeAreaPadding()
+                .animation(.easeInOut, value: selectedCollectionStatus)
+                //.navigationTitle(Text(selectedMovieType.rawValue))
             }
+            //.navigationTitle(Text(selectedCollectionStatus.rawValue))
             .navigationTitle(Text("Library"))
+            //.padding(.bottom, 10)
+            
+            HStack {
+                ForEach(CollectionStatus.allCases) { type in
+                    Button {
+                        selectedCollectionStatus = type
+                    } label: {
+                        Text(type.rawValue)
+                            .font(.subheadline)
+                            .padding(6)
+                            //.padding(16)
+                    }
+                    .matchedGeometryEffect(id: type, in: segmentedControl)
+                }
+            }
+            .background(
+                Capsule()
+                    .fill(.background.tertiary)
+                    .matchedGeometryEffect(id: selectedCollectionStatus, in: segmentedControl, isSource: false)
+            )
+            .padding(4)
+            //.padding(14)
+            .background(.secondary.opacity(0.3))
+            .clipShape(.capsule)
+            .buttonStyle(.plain)
         }
         .onAppear {
             mangas = loadLibraryItems()
@@ -62,6 +112,8 @@ struct LibraryView: View {
                 }
             }
         }
+        //.padding(.bottom, 16)
+        //.background(Color.blue.opacity(0.03))
     }
 }
 
