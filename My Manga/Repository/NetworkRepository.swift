@@ -16,8 +16,6 @@ protocol NetworkRepository: NetworkInteractor, Sendable {
     func getAuthors() async throws(NetworkError) -> [Author]
     func getMangas(page: Int, per: Int) async throws(NetworkError) -> Mangas
     func getMangaDetail(manga: Int) async throws(NetworkError) -> Manga
-//    func getNowPlaying() async throws(NetworkError) -> [Manga]
-//    func getUpcoming() async throws(NetworkError) -> [Manga]
 }
 
 extension NetworkRepository {
@@ -46,13 +44,6 @@ extension NetworkRepository {
     func getMangaDetail(manga: Int) async throws(NetworkError) -> Manga {
         try await getJSON(.get(url: .manga(id: manga), token: token), type: Manga.self)
     }
-//    func getNowPlaying() async throws(NetworkError) -> [Manga] {
-//        try await getJSON(.get(url: .nowPlaying, token: token), type: Manga.self).results
-//    }
-//    
-//    func getUpcoming() async throws(NetworkError) -> [Manga] {
-//        try await getJSON(.get(url: .upcoming, token: token), type: Manga.self).results
-//    }
 }
 
 struct Repository: NetworkRepository {

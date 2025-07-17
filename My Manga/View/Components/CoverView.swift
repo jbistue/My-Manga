@@ -55,6 +55,6 @@ struct CoverView: View {
 
 #Preview {
     @Previewable @Namespace var namespace
+    
     CoverView(manga: .test, namespace: namespace)
-//    CoverView(manga: .test)
 }

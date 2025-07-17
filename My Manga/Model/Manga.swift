@@ -12,15 +12,14 @@ import Foundation
 //}
 
 // MARK: - Manga
-struct Manga: Codable, Identifiable, Hashable {
+struct Manga: Codable, Identifiable, Hashable, Equatable {
     let id: Int
     let title, titleEnglish, titleJapanese: String?
-    let startDate: Date
-    let endDate: Date?
+    let startDate, endDate: Date?
     let status: Status
     let chapters, volumes: Int?
-    let score: Double
-    let sypnosis: String
+    let score: Double?
+    let sypnosis: String?
     let background: String?
     let themes: [Theme]
     let genres: [Gender]
@@ -34,13 +33,13 @@ struct Manga: Codable, Identifiable, Hashable {
         self.title = try container.decodeIfPresent(String.self, forKey: .title)
         self.titleEnglish = try container.decodeIfPresent(String.self, forKey: .titleEnglish)
         self.titleJapanese = try container.decodeIfPresent(String.self, forKey: .titleJapanese)
-        self.startDate = try container.decode(Date.self, forKey: .startDate)
+        self.startDate = try container.decodeIfPresent(Date.self, forKey: .startDate)
         self.endDate = try container.decodeIfPresent(Date.self, forKey: .endDate)
         self.status = try container.decode(Status.self, forKey: .status)
         self.chapters = try container.decodeIfPresent(Int.self, forKey: .chapters)
         self.volumes = try container.decodeIfPresent(Int.self, forKey: .volumes)
-        self.score = try container.decode(Double.self, forKey: .score)
-        self.sypnosis = try container.decode(String.self, forKey: .sypnosis)
+        self.score = try container.decodeIfPresent(Double.self, forKey: .score)
+        self.sypnosis = try container.decodeIfPresent(String.self, forKey: .sypnosis)
         self.background = try container.decodeIfPresent(String.self, forKey: .background)
         self.themes = try container.decode([Theme].self, forKey: .themes)
         self.genres = try container.decode([Gender].self, forKey: .genres)

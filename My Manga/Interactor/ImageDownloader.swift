@@ -14,6 +14,7 @@ actor ImageDownloader {
         case downloading(task: Task<UIImage, any Error>)
         case downloaded(image: UIImage)
     }
+    
     private var cache: [URL: ImageStatus] = [:]
     
     func image(for url: URL) async throws -> UIImage {

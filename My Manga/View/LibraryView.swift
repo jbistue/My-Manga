@@ -20,91 +20,70 @@ struct LibraryView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(MangaViewModel.self) var model
     
-//    @Query private var libraryItems: [LibraryItemDB]
     @Query private var mangas: [LibraryItemDB]
     
-//    @State private var mangas: [LibraryItem] = []
     @State private var detailsDict: [Int: Manga] = [:]
     @State private var selectedCollectionStatus: CollectionStatus = .reading
+    @State private var previousStatus: CollectionStatus = .reading
    
     @Namespace private var namespace
     @Namespace private var segmentedControl
     
-//    var mangasFiltered: [LibraryItem] {
-    var mangasFiltered: [LibraryItemDB] {
-        switch selectedCollectionStatus {
-        case .reading:
-            return mangas.filter { $0.readingVolume != nil }
-        case .complete:
-            return mangas.filter { $0.completeCollection }
-        case .incomplete:
-            return mangas.filter { !$0.completeCollection }
+    var transitionEdge: Edge {
+        if previousStatus == .reading && selectedCollectionStatus == .complete {
+            return .trailing
+        } else if previousStatus == .complete && selectedCollectionStatus == .reading {
+            return .leading
+        } else if selectedCollectionStatus == .reading {
+            return .leading
+        } else {
+            return .trailing
         }
     }
-    
+  
     var body: some View {
         NavigationStack {
-            List(mangasFiltered) { manga in
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("# \(manga.id)")
-                        
-                        if let title = detailsDict[manga.id]?.title {
-                            Text(title)
+            VStack {
+                if selectedCollectionStatus == .reading {
+                    LibraryItemsView(predicate: #Predicate { $0.readingVolume != nil }, namespace: namespace)
+                        .transition(.move(edge: .leading))
+//                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                } else if selectedCollectionStatus == .complete {
+                    LibraryItemsView(predicate: #Predicate { $0.completeCollection }, namespace: namespace)
+//                        .transition(.move(edge: .trailing))
+                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                } else {
+                    LibraryItemsView(predicate: #Predicate { !$0.completeCollection }, namespace: namespace)
+                        .transition(.move(edge: .trailing))
+//                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                }
+                
+                HStack {
+                    ForEach(CollectionStatus.allCases) { type in
+                        Button {
+                            previousStatus = selectedCollectionStatus
+                            selectedCollectionStatus = type
+                        } label: {
+                            Text(type.rawValue)
+                                .font(.subheadline)
+                                .padding(6)
                         }
+                        .matchedGeometryEffect(id: type, in: segmentedControl)
                     }
-                    .font(.headline)
-                    
-                    HStack {
-                        Text(manga.completeCollection ? "Completed" : "Not Completed")
-                        
-                        Text("(\(manga.volumesOwned.count)/\(detailsDict[manga.id]?.volumes ?? 0))")
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(manga.completeCollection ? .green : .red)
-                    
-                    Text(manga.volumesOwned.map { String($0) }.joined(separator: ", "))
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                    
-                    Text(manga.readingVolume.map { "\($0)" } ?? "-")
-                        .font(.caption)
                 }
-                .task {
-                    await model.getMangaDetail(id: manga.id)
-                    detailsDict[manga.id] = model.manga
-                }
-                //.safeAreaPadding()
-                .animation(.easeInOut, value: selectedCollectionStatus)
-                //.navigationTitle(Text(selectedMovieType.rawValue))
+                .background(
+                    Capsule()
+                        .fill(.background.tertiary)
+                        .matchedGeometryEffect(id: selectedCollectionStatus, in: segmentedControl, isSource: false)
+                )
+                .padding(4)
+                .background(.secondary.opacity(0.3))
+                .clipShape(.capsule)
+                .buttonStyle(.plain)
             }
-            //.navigationTitle(Text(selectedCollectionStatus.rawValue))
+            .safeAreaPadding()
+            .animation(.easeInOut, value: selectedCollectionStatus)
             .navigationTitle(Text("Library"))
-            //.padding(.bottom, 10)
-            
-            HStack {
-                ForEach(CollectionStatus.allCases) { type in
-                    Button {
-                        selectedCollectionStatus = type
-                    } label: {
-                        Text(type.rawValue)
-                            .font(.subheadline)
-                            .padding(6)
-                            //.padding(16)
-                    }
-                    .matchedGeometryEffect(id: type, in: segmentedControl)
-                }
-            }
-            .background(
-                Capsule()
-                    .fill(.background.tertiary)
-                    .matchedGeometryEffect(id: selectedCollectionStatus, in: segmentedControl, isSource: false)
-            )
-            .padding(4)
-            //.padding(14)
-            .background(.secondary.opacity(0.3))
-            .clipShape(.capsule)
-            .buttonStyle(.plain)
         }
 //        .onAppear {
 //            mangas = loadLibraryItems()
@@ -118,16 +97,12 @@ struct LibraryView: View {
                 }
             }
         }
-        //.padding(.bottom, 16)
-        //.background(Color.blue.opacity(0.03))
     }
 }
 
 #Preview(traits: .sampleData) {
-//#Preview() {
     @Previewable @State var model = MangaViewModel()
     
     LibraryView()
         .environment(model)
-//        .modelContainer(for: LibraryItemDB.self, inMemory: true)
 }

@@ -11,6 +11,7 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(MangaViewModel.self) var model
+    
     @Namespace private var namespace
     
 //    @Query private var items: [Item]
@@ -25,7 +26,7 @@ struct ContentView: View {
             // Tab("Home", systemImage: "house.fill") {
             Tab("Store", systemImage: "bag.fill") {
                 StoreView(namespace: namespace)
-                // MangaListView()
+//                MangaListView()
                     .navigationBarTitle("Store")
             }
             

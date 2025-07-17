@@ -295,6 +295,9 @@
         }
       }
     },
+    "Detalle del ítem %lld" : {
+
+    },
     "Finished" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -368,6 +371,9 @@
         }
       }
     },
+    "Item %lld" : {
+
+    },
     "JSON error: %@" : {
       "localizations" : {
         "es" : {
@@ -419,6 +425,9 @@
           }
         }
       }
+    },
+    "Pollos" : {
+
     },
     "Reading" : {
       "localizations" : {

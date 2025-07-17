@@ -9,75 +9,70 @@ import SwiftUI
 
 struct StoreView: View {
     @Environment(MangaViewModel.self) var model
-//    @Query private var movies: [Movie]
-//    let libraryItems: [LibraryItem] // = []
-//    let detailsDict: [Int: Manga] // = []
+
+    private let screenHeight = UIScreen.main.bounds.height
     let namespace: Namespace.ID
-//    
-//    init(predicate: Predicate<LibraryItem>, namespace: Namespace.ID) {
-//    init(predicate: Predicate<Manga>, namespace: Namespace.ID) {
+
     init(namespace: Namespace.ID) {
         self.namespace = namespace
-//        
-//        mangas = loadLibraryItems()
-//        _movies = Query(filter: predicate, sort: [SortDescriptor<Movie>(\.title)])
     }
     
     var body: some View {
         NavigationStack {
-            VStack {
-                ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
-                        ForEach(model.mangas.items) { manga in
-                            //                ForEach(libraryItems) { manga in
-                            //                    NavigationLink(destination: MangaDetailView(manga: manga)) {
-                            NavigationLink(value: manga) {
-                                //                        CoverView(manga: manga)
-                                CoverView(manga: manga, namespace: namespace)
-                                //                        CoverView(manga: detailsDict[manga.id]!, namespace: namespace)
-                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                            }
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
+                    ForEach(model.mangas) { manga in
+                        NavigationLink(value: manga) {
+                            CoverView(manga: manga, namespace: namespace)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
                     }
-                    .task {
-                        await model.getMangas()
-                    }
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button {
-            //                    isFormPresented = true
-                            } label: {
-                                Image(systemName: "line.3.horizontal.decrease.circle")
-                                    .font(.title3)
+                }
+                .background(
+                    GeometryReader { proxy in
+                        Color.clear
+                            .onChange(of: proxy.frame(in: .global).minY) { oldValue, newValue in
+                                let contentHeight = proxy.size.height
+                                let offsetY = proxy.frame(in: .global).minY
+
+                                let visibleBottom = contentHeight + offsetY
+
+                                if visibleBottom < screenHeight + 700 {
+                                    Task {
+                                        await model.fetchMangas()
+                                    }
+                                }
                             }
+                    }
+                )
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+//                            isFormPresented = true
+                        } label: {
+                            Image(systemName: "line.3.horizontal.decrease.circle")
+                                .font(.title3)
                         }
                     }
                 }
             }
-            .safeAreaPadding()
-            //        .animation(.easeInOut, value: selectedMovieType)
-            //        .navigationTitle(Text(selectedMovieType.rawValue))
-                    .navigationTitle(Text("Store"))
+            .navigationTitle(Text("Store"))
             .navigationDestination(for: Manga.self) { manga in
                 MangaDetailView(manga: manga)
                     .navigationTransition(.zoom(sourceID: "cover_\(manga.id)", in: namespace))
             }
         }
+        .task {
+            await model.fetchMangas()
+//            await model.getMangas(page: 1, per: 90)
+        }
     }
 }
 
 #Preview {
-//    @Previewable @Namespace var namespace
-//    MangasView(predicate: #Predicate<Manga> { $0.volumes ?? 0 > 0 }, namespace: namespace)
-//    MangasView(libraryItems: PreviewRepository().loadLibraryItems(),
-//               detailsDict: PreviewRepository().getDetailsMangaLibraryDict(),
-//               namespace: namespace)
     @Previewable @State var model = MangaViewModel()
     @Previewable @Namespace var namespace
     
     StoreView(namespace: namespace)
-        .task {
-            await model.getMangas()
-        }
         .environment(model)
 }
