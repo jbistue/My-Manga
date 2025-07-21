@@ -30,7 +30,7 @@ struct DemographicsView: View {
     
     DemographicsView()
         .task {
-            model.loadInitialData()
+            model.loadMangaClassifications()
         }
         .environment(model)
 }

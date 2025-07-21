@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct MangaListView: View {
-//    @Environment(MangaViewModel.self) var model
-    @State var model = SampleMangaViewModel()
+    @Environment(MangaViewModel.self) var model
+
+    @State private var lastFilter: String = ""
     
     private let screenHeight = UIScreen.main.bounds.height
     
@@ -20,47 +21,63 @@ struct MangaListView: View {
                     ForEach(model.mangas) { manga in
 //                        NavigationLink(destination: Text("Detalle del Manga \(manga.id)")) {
                         NavigationLink(destination: MangaDetailView(manga: manga)) {
-                            Text("[#\(manga.id)] \(manga.title ?? "N/A")")
-                                .foregroundColor(.primary)
+                            RowListView(manga: manga)
+//                            Text("[#\(manga.id)] \(manga.title ?? "N/A")")
+//                                .foregroundColor(.primary)
                         }
                     }
                 }
+                .padding(.horizontal, 8)
                 .background(
                     GeometryReader { proxy in
                         Color.clear
-                            .onChange(of: proxy.frame(in: .global).minY) { oldValue, newValue in
+                            .onChange(of: proxy.frame(in: .global).minY) { _, newValue in
                                 let contentHeight = proxy.size.height
-                                let offsetY = proxy.frame(in: .global).minY
+                                let offsetY = newValue
 
                                 let visibleBottom = contentHeight + offsetY
 
                                 if visibleBottom < screenHeight + 200 {
-                                    model.fetchMangas()
-//                                    Task {
+                                    Task {
+                                        await model.fetchFilteredMangas()
 //                                        await model.fetchMangas()
-//                                    }
+                                    }
                                 }
                             }
                     }
                 )
             }
             .navigationTitle(Text("Mangas"))
+            .mangaFiltersButton()
         }
+//        .mangaFiltersButton(mangaFilter: $bindableModel.mangaFilter)
         .task {
-            model.fetchMangas()
+            await model.fetchFilteredMangas()
 //            await model.fetchMangas()
 //            await model.getMangas(page: 5, per: 30)
+        }
+        .onChange(of: model.mangaFilter) { _, newValue in
+            guard newValue != lastFilter else { return }
+            lastFilter = newValue
+
+            model.mangas = []
+            model.currentPage = 1
+            model.hasMorePages = true
+
+            Task {
+                await model.fetchFilteredMangas()
+            }
         }
     }
 }
 
 
 #Preview {
-//    @Previewable @State var model = MangaViewModel()
-//    @Previewable @State var model = SampleMangaViewModel()
-//    let model = SampleMangaViewModel()
+    @Previewable @State var model = MangaViewModel()
     
     MangaListView()
-//        .environment(model)
-//        .environment(mockModel)
+        .task {
+            model.loadMangaClassifications()
+        }
+        .environment(model)
 }

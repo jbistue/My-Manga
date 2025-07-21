@@ -38,7 +38,7 @@ extension PreviewTrait where T == Preview.ViewTraits {
     static var sampleData: Self = .modifier(SampleData())
 }
 
-// TODO: Remove this when the repository is implemented!!!!! -> Acabar tema carga datos mockeados  de los mangas 1 a 30 o a 90
+// TODO: Acabar tema carga datos mockeados de los mangas 1 a 30 o a 90
 @Observable
 @MainActor
 final class SampleMangaViewModel {

@@ -30,7 +30,7 @@ struct AuthorsView: View {
     
     AuthorsView()
         .task {
-            model.loadInitialData()
+            model.loadMangaClassifications()
         }
         .environment(model)
 }

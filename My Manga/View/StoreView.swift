@@ -9,6 +9,8 @@ import SwiftUI
 
 struct StoreView: View {
     @Environment(MangaViewModel.self) var model
+    
+    @State private var lastFilter: String = ""
 
     private let screenHeight = UIScreen.main.bounds.height
     let namespace: Namespace.ID
@@ -28,43 +30,46 @@ struct StoreView: View {
                         }
                     }
                 }
+                .padding(.horizontal, 8)
                 .background(
                     GeometryReader { proxy in
                         Color.clear
-                            .onChange(of: proxy.frame(in: .global).minY) { oldValue, newValue in
+                            .onChange(of: proxy.frame(in: .global).minY) { _, newValue in
                                 let contentHeight = proxy.size.height
-                                let offsetY = proxy.frame(in: .global).minY
+                                let offsetY = newValue
 
                                 let visibleBottom = contentHeight + offsetY
 
                                 if visibleBottom < screenHeight + 700 {
                                     Task {
-                                        await model.fetchMangas()
+                                        await model.fetchFilteredMangas()
                                     }
                                 }
                             }
                     }
                 )
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-//                            isFormPresented = true
-                        } label: {
-                            Image(systemName: "line.3.horizontal.decrease.circle")
-                                .font(.title3)
-                        }
-                    }
-                }
             }
             .navigationTitle(Text("Store"))
+            .mangaFiltersButton()
             .navigationDestination(for: Manga.self) { manga in
                 MangaDetailView(manga: manga)
                     .navigationTransition(.zoom(sourceID: "cover_\(manga.id)", in: namespace))
             }
         }
         .task {
-            await model.fetchMangas()
-//            await model.getMangas(page: 1, per: 90)
+            await model.fetchFilteredMangas()
+        }
+        .onChange(of: model.mangaFilter) { _, newValue in
+            guard newValue != lastFilter else { return }
+            lastFilter = newValue
+
+            model.mangas = []
+            model.currentPage = 1
+            model.hasMorePages = true
+
+            Task {
+                await model.fetchFilteredMangas()
+            }
         }
     }
 }
@@ -74,5 +79,8 @@ struct StoreView: View {
     @Previewable @Namespace var namespace
     
     StoreView(namespace: namespace)
+        .task {
+            model.loadMangaClassifications()
+        }
         .environment(model)
 }

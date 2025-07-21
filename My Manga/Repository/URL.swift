@@ -18,13 +18,19 @@ extension URL {
     
     static let authors = apiURL.appending(path: "list/authors")
     
-    static func mangas(page: Int, per: Int) -> URL {
-        apiURL.appending(path: "list/mangas").appending(queryItems: [
-            URLQueryItem(name: "page", value: String(page)),
-            URLQueryItem(name: "per", value: String(per))])
-    }
+//    static func mangas(page: Int, per: Int) -> URL {
+//        apiURL.appending(path: "list/mangas").appending(queryItems: [
+//            URLQueryItem(name: "page", value: String(page)),
+//            URLQueryItem(name: "per", value: String(per))])
+//    }
     
     static func manga(id: Int) -> URL {
         apiURL.appending(path: "search/manga/\(id)")
+    }
+    
+    static func mangasFiltered(by: String, page: Int, per: Int) -> URL {
+        apiURL.appending(path: "list/\(by)").appending(queryItems: [
+            URLQueryItem(name: "page", value: String(page)),
+            URLQueryItem(name: "per", value: String(per))])
     }
 }

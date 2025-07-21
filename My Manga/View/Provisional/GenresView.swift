@@ -30,7 +30,7 @@ struct GenresView: View {
     
     GenresView()
         .task {
-            model.loadInitialData()
+            model.loadMangaClassifications()
         }
         .environment(model)
 }

@@ -29,16 +29,68 @@ struct LibraryView: View {
     @Namespace private var namespace
     @Namespace private var segmentedControl
     
+//  TODO: Solucionar problema transiciones entre Reading,Complete e Incomplete
     var transitionEdge: Edge {
         if previousStatus == .reading && selectedCollectionStatus == .complete {
             return .trailing
         } else if previousStatus == .complete && selectedCollectionStatus == .reading {
             return .leading
-        } else if selectedCollectionStatus == .reading {
+        } else if previousStatus == .incomplete && selectedCollectionStatus == .complete {
             return .leading
         } else {
             return .trailing
         }
+    }
+    
+    var insertTransitionEdge: Edge {
+        if previousStatus == .reading {
+            return .trailing
+            //            } else if previousStatus == .complete && selectedCollectionStatus == .reading {
+            //                return .leading
+            //            } else if selectedCollectionStatus == .reading {
+            //                return .leading
+        }
+            else if previousStatus == .incomplete {
+                return .leading
+            } else {
+                return .leading
+            }
+//        if previousStatus == .complete && selectedCollectionStatus == .reading {
+//        if selectedCollectionStatus == .complete && previousStatus == .reading {
+//            return .trailing // trailing
+////        } else if previousStatus == .complete && selectedCollectionStatus == .reading {
+////            return .leading
+////        } else if selectedCollectionStatus == .reading {
+////            return .leading
+//        } //else {
+//        if selectedCollectionStatus == .complete && previousStatus == .incomplete {
+//            return .leading
+//        }
+    }
+    
+    var removeTransitionEdge: Edge {
+        if selectedCollectionStatus == .reading {
+            return .trailing
+            //            } else if previousStatus == .reading && selectedCollectionStatus == .complete {
+            //                return .trailing
+            //            } else if selectedCollectionStatus == .reading {
+            //                return .leading
+        }
+            else if selectedCollectionStatus == .incomplete  {
+                return .leading
+            } else {
+                return .leading
+            }
+//        if selectedCollectionStatus == .incomplete && previousStatus == .complete {
+////        if previousStatus == .complete && selectedCollectionStatus == .reading {
+//            return .trailing // trailing
+////        } else if previousStatus == .complete && selectedCollectionStatus == .reading {
+////            return .leading
+////        } else if selectedCollectionStatus == .reading {
+////            return .leading
+//        } else {
+//            return .leading
+//        }
     }
   
     var body: some View {
@@ -50,8 +102,8 @@ struct LibraryView: View {
 //                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
                 } else if selectedCollectionStatus == .complete {
                     LibraryItemsView(predicate: #Predicate { $0.completeCollection }, namespace: namespace)
-//                        .transition(.move(edge: .trailing))
-                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
+                        .transition(.move(edge: transitionEdge))
+//                        .transition(.asymmetric(insertion: .move(edge: insertTransitionEdge), removal: .move(edge: removeTransitionEdge)))
                 } else {
                     LibraryItemsView(predicate: #Predicate { !$0.completeCollection }, namespace: namespace)
                         .transition(.move(edge: .trailing))
@@ -61,8 +113,13 @@ struct LibraryView: View {
                 HStack {
                     ForEach(CollectionStatus.allCases) { type in
                         Button {
-                            previousStatus = selectedCollectionStatus
+//                            if type == .complete {
+                                previousStatus = selectedCollectionStatus
+//                            }
+                            print("Desaparece:", previousStatus, insertTransitionEdge, removeTransitionEdge)
                             selectedCollectionStatus = type
+//                            previousStatus = selectedCollectionStatus
+                            print("Aparece:", selectedCollectionStatus, insertTransitionEdge, removeTransitionEdge)
                         } label: {
                             Text(type.rawValue)
                                 .font(.subheadline)

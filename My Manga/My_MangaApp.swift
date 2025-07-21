@@ -24,7 +24,7 @@ struct My_MangaApp: App {
     }()
 
     init() {
-        model.loadInitialData()
+        model.loadMangaClassifications()
     }
     
     var body: some Scene {

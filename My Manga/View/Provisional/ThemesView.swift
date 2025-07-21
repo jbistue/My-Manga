@@ -30,7 +30,7 @@ struct ThemesView: View {
     
     ThemesView()
         .task {
-            model.loadInitialData()
+            model.loadMangaClassifications()
         }
         .environment(model)
 }

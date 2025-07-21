@@ -25,27 +25,29 @@ struct ContentView: View {
             
             // Tab("Home", systemImage: "house.fill") {
             Tab("Store", systemImage: "bag.fill") {
-                StoreView(namespace: namespace)
-//                MangaListView()
+//                StoreView(namespace: namespace)
+                MangaListView()
                     .navigationBarTitle("Store")
             }
             
-//            // Tab("Search", systemImage: "magnifyingglass", role: .search) {
-//            Tab("Genres", systemImage: "magnifyingglass") {
-//                GenresView()
-//                    .navigationBarTitle("Search")
-//            }
-//            
-//            Tab("Themes", systemImage: "person.2.fill") {
-//                ThemesView()
-//                    .navigationBarTitle("Themes")
-//            }
-//            
-//            // Tab("Settings", systemImage: "gear") {
+            // Tab("Search", systemImage: "magnifyingglass", role: .search) {
+            Tab("Genres", systemImage: "magnifyingglass") {
+                GenresView()
+                    .navigationBarTitle("Search")
+            }
+            
+            Tab("Themes", systemImage: "person.2.fill") {
+                ThemesView()
+                    .navigationBarTitle("Themes")
+            }
+            
+//            Tab("Settings", systemImage: "gear") {
 //            Tab("Authors", systemImage: "gear") {
+            Tab("Demographics", systemImage: "gear") {
+                DemographicsView()
 //                AuthorsView()
-//                    .navigationBarTitle("Settings")
-//            }
+                    .navigationBarTitle("Settings")
+            }
         }
         .tabViewStyle(.sidebarAdaptable)
     }
@@ -56,9 +58,9 @@ struct ContentView: View {
     @Previewable @State var model = MangaViewModel()
     
     ContentView()
-//        .task {
-//            model.loadInitialData()
-//        }
+        .task {
+            model.loadMangaClassifications()
+        }
         .environment(model)
 //        .modelContainer(for: Item.self, inMemory: true)
 }

@@ -14,7 +14,8 @@ protocol NetworkRepository: NetworkInteractor, Sendable {
     func getGenres() async throws(NetworkError) -> [String]
     func getThemes() async throws(NetworkError) -> [String]
     func getAuthors() async throws(NetworkError) -> [Author]
-    func getMangas(page: Int, per: Int) async throws(NetworkError) -> Mangas
+//    func getMangas(page: Int, per: Int) async throws(NetworkError) -> Mangas
+    func getFilteredMangas(filter: String, page: Int, per: Int) async throws(NetworkError) -> Mangas
     func getMangaDetail(manga: Int) async throws(NetworkError) -> Manga
 }
 
@@ -37,8 +38,12 @@ extension NetworkRepository {
         try await getJSON(.get(url: .authors, token: token), type: [Author].self)
     }
 
-    func getMangas(page: Int, per: Int) async throws(NetworkError) -> Mangas {
-        try await getJSON(.get(url: .mangas(page: page, per: per), token: token), type: Mangas.self)
+//    func getMangas(page: Int, per: Int) async throws(NetworkError) -> Mangas {
+//        try await getJSON(.get(url: .mangas(page: page, per: per), token: token), type: Mangas.self)
+//    }
+    
+    func getFilteredMangas(filter: String, page: Int, per: Int) async throws(NetworkError) -> Mangas {
+        try await getJSON(.get(url: .mangasFiltered(by: filter, page: page, per: per), token: token), type: Mangas.self)
     }
     
     func getMangaDetail(manga: Int) async throws(NetworkError) -> Manga {
