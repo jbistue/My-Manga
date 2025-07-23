@@ -7,7 +7,8 @@
 
 import SwiftUI
 
-@Observable @MainActor
+@Observable
+@MainActor
 final class AsyncImageViewModel {
     let downloader: ImageDownloader
     

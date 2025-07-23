@@ -27,23 +27,6 @@
         }
       }
     },
-    "[#%lld] %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "[#%1$lld] %2$@"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "[#%1$lld] %2$@"
-          }
-        }
-      }
-    },
     "**Authors:** %@" : {
       "localizations" : {
         "es" : {
@@ -84,9 +67,6 @@
         }
       }
     },
-    "**Demographics**: %@" : {
-
-    },
     "**End:** %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -117,9 +97,6 @@
           }
         }
       }
-    },
-    "**Genres**: %@" : {
-
     },
     "**Japanese title:** %@" : {
       "localizations" : {
@@ -182,8 +159,26 @@
         }
       }
     },
-    "**Themes**: %@" : {
-
+    "**Title:**" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Título:**"
+          }
+        }
+      }
+    },
+    "**Title:** %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Título:** %@"
+          }
+        }
+      }
     },
     "**Volumes:** %@" : {
       "localizations" : {
@@ -316,8 +311,16 @@
         }
       }
     },
-    "Demographics:" : {
-
+    "Demography" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demografía"
+          }
+        }
+      }
     },
     "Detalle del ítem %lld" : {
 
@@ -343,6 +346,17 @@
         }
       }
     },
+    "Genre" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Género"
+          }
+        }
+      }
+    },
     "Genres" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -353,9 +367,6 @@
           }
         }
       }
-    },
-    "Genres:" : {
-
     },
     "Home" : {
       "extractionState" : "manual",
@@ -454,7 +465,7 @@
       }
     },
     "Pollos" : {
-
+      "shouldTranslate" : false
     },
     "Reading" : {
       "localizations" : {
@@ -473,6 +484,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Buscar"
+          }
+        }
+      }
+    },
+    "Search by title" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buscar por título"
           }
         }
       }
@@ -499,6 +520,17 @@
         }
       }
     },
+    "Theme" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tema"
+          }
+        }
+      }
+    },
     "Themes" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -509,9 +541,6 @@
           }
         }
       }
-    },
-    "Themes:" : {
-
     },
     "There is no Manga in the library." : {
       "extractionState" : "manual",

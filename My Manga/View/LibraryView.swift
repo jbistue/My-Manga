@@ -116,10 +116,10 @@ struct LibraryView: View {
 //                            if type == .complete {
                                 previousStatus = selectedCollectionStatus
 //                            }
-                            print("Desaparece:", previousStatus, insertTransitionEdge, removeTransitionEdge)
+//                            print("Desaparece:", previousStatus, insertTransitionEdge, removeTransitionEdge)
                             selectedCollectionStatus = type
 //                            previousStatus = selectedCollectionStatus
-                            print("Aparece:", selectedCollectionStatus, insertTransitionEdge, removeTransitionEdge)
+//                            print("Aparece:", selectedCollectionStatus, insertTransitionEdge, removeTransitionEdge)
                         } label: {
                             Text(type.rawValue)
                                 .font(.subheadline)

@@ -28,9 +28,21 @@ extension URL {
         apiURL.appending(path: "search/manga/\(id)")
     }
     
-    static func mangasFiltered(by: String, page: Int, per: Int) -> URL {
-        apiURL.appending(path: "list/\(by)").appending(queryItems: [
+    static func filterOrSearchMangas(by: String, page: Int, per: Int) -> URL {
+        apiURL.appending(path: by).appending(queryItems: [
             URLQueryItem(name: "page", value: String(page)),
             URLQueryItem(name: "per", value: String(per))])
     }
+    
+//    static func filteredMangas(by: String, page: Int, per: Int) -> URL {
+//        apiURL.appending(path: "list/\(by)").appending(queryItems: [
+//            URLQueryItem(name: "page", value: String(page)),
+//            URLQueryItem(name: "per", value: String(per))])
+//    }
+//    
+//    static func searchedMangas(contains: String, page: Int, per: Int) -> URL {
+//        apiURL.appending(path: "search/\(contains)").appending(queryItems: [
+//            URLQueryItem(name: "page", value: String(page)),
+//            URLQueryItem(name: "per", value: String(per))])
+//    }
 }

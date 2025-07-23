@@ -13,9 +13,9 @@ struct GenresView: View {
     var body: some View {
         NavigationStack {
             List {
-                ForEach(model.genres, id: \.self) { gender in
-                    NavigationLink(destination: Text(gender)) {
-                        Text(gender)
+                ForEach(model.genres, id: \.self) { genre in
+                    NavigationLink(destination: Text(genre)) {
+                        Text(genre)
                             .foregroundColor(.primary)
                     }
                 }

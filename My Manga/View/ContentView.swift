@@ -13,8 +13,6 @@ struct ContentView: View {
     @Environment(MangaViewModel.self) var model
     
     @Namespace private var namespace
-    
-//    @Query private var items: [Item]
 
     var body: some View {
         TabView {
@@ -23,38 +21,22 @@ struct ContentView: View {
                     .navigationBarTitle("Library")
             }
             
-            // Tab("Home", systemImage: "house.fill") {
             Tab("Store", systemImage: "bag.fill") {
-//                StoreView(namespace: namespace)
-                MangaListView()
+                StoreView(namespace: namespace)
+//                MangaListView()
                     .navigationBarTitle("Store")
             }
             
-            // Tab("Search", systemImage: "magnifyingglass", role: .search) {
-            Tab("Genres", systemImage: "magnifyingglass") {
-                GenresView()
-                    .navigationBarTitle("Search")
-            }
-            
-            Tab("Themes", systemImage: "person.2.fill") {
-                ThemesView()
-                    .navigationBarTitle("Themes")
-            }
-            
-//            Tab("Settings", systemImage: "gear") {
-//            Tab("Authors", systemImage: "gear") {
-            Tab("Demographics", systemImage: "gear") {
-                DemographicsView()
+//            Tab("Authors", systemImage: "person.2.fill") {
 //                AuthorsView()
-                    .navigationBarTitle("Settings")
-            }
+//                    .navigationBarTitle("Authors")
+//            }
         }
         .tabViewStyle(.sidebarAdaptable)
     }
 }
 
 #Preview(traits: .sampleData) {
-//#Preview {
     @Previewable @State var model = MangaViewModel()
     
     ContentView()

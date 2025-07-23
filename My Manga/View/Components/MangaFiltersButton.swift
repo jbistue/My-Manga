@@ -10,32 +10,30 @@ import SwiftUI
 struct MangaFiltersButton: ViewModifier {
     @Environment(MangaViewModel.self) var model
 
-    @State var menuLabel = String(localized: "All")
-    
     func body(content: Content) -> some View {
         content
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Menu(menuLabel) {
+                    Menu(model.menuLabel) {
                         Button(String(localized: "All")) {
-                            menuLabel = String(localized: "All")
-                            model.mangaFilter = "mangas"
+                            model.menuLabel = String(localized: "All")
+                            model.mangaFilter = "list/mangas"
                         }
                         
                         Menu(String(localized: "Demographics")) {
                             ForEach(model.demographics, id: \.self) { demographic in
                                 Button(demographic) {
-                                    menuLabel = "\(String(localized: "Demographics:")) \(demographic)"
-                                    model.mangaFilter = "mangaByDemographic/\(demographic)"
+                                    model.menuLabel = "\(String(localized: "Demography")): \(demographic)"
+                                    model.mangaFilter = "list/mangaByDemographic/\(demographic)"
                                 }
                             }
                         }
                         
                         Menu(String(localized: "Genres")) {
-                            ForEach(model.genres, id: \.self) { gender in
-                                Button(gender) {
-                                    menuLabel = "\(String(localized: "Genres:")) \(gender)"
-                                    model.mangaFilter = "mangaByGenre/\(gender)"
+                            ForEach(model.genres, id: \.self) { genre in
+                                Button(genre) {
+                                    model.menuLabel = "\(String(localized: "Genre")): \(genre)"
+                                    model.mangaFilter = "list/mangaByGenre/\(genre)"
                                 }
                             }
                         }
@@ -43,8 +41,8 @@ struct MangaFiltersButton: ViewModifier {
                         Menu(String(localized: "Themes")) {
                             ForEach(model.themes, id: \.self) { theme in
                                 Button(theme) {
-                                    menuLabel = "\(String(localized: "Themes:")) \(theme)"
-                                    model.mangaFilter = "mangaByTheme/\(theme)"
+                                    model.menuLabel = "\(String(localized: "Theme")): \(theme)"
+                                    model.mangaFilter = "list/mangaByTheme/\(theme)"
                                 }
                             }
                         }

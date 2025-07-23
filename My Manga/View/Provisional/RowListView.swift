@@ -16,21 +16,21 @@ struct RowListView: View {
             HStack {
                 Text("# \(manga.id)")
                 
-                Text("**English title:** \(manga.titleEnglish ?? "-")")
+                Text("**Title:** \(manga.title ?? "-")")
             }
             .font(.headline)
             .foregroundColor(.primary)
             .padding(.bottom, 2)
             
-            Text("**Demographics**: \(manga.demographics.map { $0.demographic }.joined(separator: ", "))")
+            Text("**Demographics:** \(manga.demographics.map { $0.demographic }.joined(separator: ", "))")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
-            Text("**Genres**: \(manga.genres.map { $0.genre }.joined(separator: ", "))")
+            Text("**Genres:** \(manga.genres.map { $0.genre }.joined(separator: ", "))")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
-            Text("**Themes**: \(manga.themes.map { $0.theme }.joined(separator: ", "))")
+            Text("**Themes:** \(manga.themes.map { $0.theme }.joined(separator: ", "))")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             

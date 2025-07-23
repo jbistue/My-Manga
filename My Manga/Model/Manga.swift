@@ -22,7 +22,7 @@ struct Manga: Codable, Identifiable, Hashable, Equatable {
     let sypnosis: String?
     let background: String?
     let themes: [Theme]
-    let genres: [Gender]
+    let genres: [Genre]
     let demographics: [Demographic]
     let authors: [Author]
     let url, mainPicture: URL?
@@ -42,7 +42,7 @@ struct Manga: Codable, Identifiable, Hashable, Equatable {
         self.sypnosis = try container.decodeIfPresent(String.self, forKey: .sypnosis)
         self.background = try container.decodeIfPresent(String.self, forKey: .background)
         self.themes = try container.decode([Theme].self, forKey: .themes)
-        self.genres = try container.decode([Gender].self, forKey: .genres)
+        self.genres = try container.decode([Genre].self, forKey: .genres)
         self.demographics = try container.decode([Demographic].self, forKey: .demographics)
         self.authors = try container.decode([Author].self, forKey: .authors)
         
@@ -66,8 +66,8 @@ extension Manga {
         let id, demographic: String
     }
     
-    // MARK: - Gender
-    struct Gender: Codable, Hashable {
+    // MARK: - Genre
+    struct Genre: Codable, Hashable {
         let id, genre: String
     }
     

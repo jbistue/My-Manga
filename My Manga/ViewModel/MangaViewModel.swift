@@ -13,16 +13,14 @@ final class MangaViewModel {
     private let repository: NetworkRepository
     private let loader = MangaDataLoader()
     
-//    @ObservationIgnored
-//    private var mangasPage = Mangas(items: [], metadata: Metadata(total: 0, per: 0, page: 0))
-    
     var demographics = [String]()
     var genres = [String]()
     var themes = [String]()
     var authors = [Author]()
     var manga: Manga? = nil
     var mangas: [Manga] = []
-    var mangaFilter = "mangas"
+    var mangaFilter = "list/mangas"
+    var menuLabel = String(localized: "All")
     
     var currentPage = 1
     private let perPage = 30
@@ -69,7 +67,8 @@ extension MangaViewModel {
 //        }
             
         do {
-            let mangaNewItems = try await repository.getFilteredMangas(filter: mangaFilter, page: currentPage, per: perPage)
+//            let mangaNewItems = try await repository.getFilteredMangas(filter: mangaFilter, page: currentPage, per: perPage)
+            let mangaNewItems = try await repository.getMangasBy(filter: mangaFilter, page: currentPage, per: perPage)
 
             if mangaNewItems.items.isEmpty {
                 hasMorePages = false
@@ -82,7 +81,7 @@ extension MangaViewModel {
         }
             
         isLoading = false
-        }
+    }
     
     func getMangaDetail(id: Int) async {
         do {
