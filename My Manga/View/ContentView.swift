@@ -17,7 +17,7 @@ struct ContentView: View {
     var body: some View {
         TabView {
             Tab("Library", systemImage: "books.vertical.fill") {
-                LibraryView()
+                LibraryView2()
                     .navigationBarTitle("Library")
             }
             

@@ -11,6 +11,9 @@
         }
       }
     },
+    "···" : {
+
+    },
     "(%lld/%lld)" : {
       "localizations" : {
         "en" : {
@@ -367,6 +370,9 @@
           }
         }
       }
+    },
+    "Hello, World!" : {
+
     },
     "Home" : {
       "extractionState" : "manual",

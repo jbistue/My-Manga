@@ -8,13 +8,17 @@
 import SwiftUI
 
 struct MangaDetailView: View {
-    private let model = AsyncImageViewModel()
+//    private let model = AsyncImageViewModel()
     let manga: Manga
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                cover
+//                MangaImageView(manga: manga)
+                MangaImageView(url: manga.mainPicture)
+//                cover
+                    .scaledToFit()
+                    .frame(minHeight: 150, maxHeight: 400, alignment: .center)
                     .padding(.bottom, 16)
 
                 Text("**English title:** \(manga.titleEnglish ?? "-")")
@@ -37,13 +41,17 @@ struct MangaDetailView: View {
                     .padding(.bottom, 2)
                 Text("**Synopsis:** \(manga.sypnosis ?? "-")")
                     .padding(.bottom, 2)
-                Text("**Themes:** \(manga.themes.map { $0.theme }.joined(separator: ", "))")
+//                Text("**Themes:** \(manga.themes.map { $0.theme }.joined(separator: ", "))")
+                Text("**Themes:** \(manga.themes.map { $0.theme }.formatted(.list(type: .and)))")
                     .padding(.bottom, 2)
-                Text("**Genres:** \(manga.genres.map { $0.genre }.joined(separator: ", "))")
+//                Text("**Genres:** \(manga.genres.map { $0.genre }.joined(separator: ", "))")
+                Text("**Genres:** \(manga.genres.map { $0.genre }.formatted(.list(type: .and)))")
                     .padding(.bottom, 2)
-                Text("**Demographics:** \(manga.demographics.map { $0.demographic }.joined(separator: ", "))")
+//                Text("**Demographics:** \(manga.demographics.map { $0.demographic }.joined(separator: ", "))")
+                Text("**Demographics:** \(manga.demographics.map { $0.demographic }.formatted(.list(type: .and)))")
                     .padding(.bottom, 2)
-                Text("**Authors:** \(manga.authors.map { "\($0.firstName) \($0.lastName) (\($0.role))" }.joined(separator: ", "))")
+//                Text("**Authors:** \(manga.authors.map { "\($0.firstName) \($0.lastName) (\($0.role))" }.joined(separator: ", "))")
+                Text("**Authors:** \(manga.authors.map { "\($0.firstName) \($0.lastName) (\($0.role))" }.formatted(.list(type: .and)))")
                     .padding(.bottom, 2)
                 Link("\(manga.url?.absoluteString ?? "-")", destination: manga.url ?? URL(string: "")!)
                     .padding(.bottom, 2)
@@ -64,32 +72,32 @@ struct MangaDetailView: View {
         }
     }
     
-    @ViewBuilder
-    var cover: some View {
-        if let cover = model.image {
-            Image(uiImage: cover)
-                .resizable()
-                .scaledToFit()
-//                .scaledToFill()
-                .cornerRadius(10)
-                .frame(minHeight: 150, maxHeight: 400, alignment: .center)
-                .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
-        } else {
-            Image(systemName: "photo")
-                .resizable()
-                .scaledToFit()
-                .padding(100)
-                .frame(minHeight: 150, maxHeight: 400, alignment: .center)
-                .background {
-                    Color.gray.opacity(0.2)
-                }
-                .clipShape(.ellipse)
-                .onAppear {
-                    guard let url = manga.mainPicture else { return }
-                    model.getImage(from: url)
-                }
-        }
-    }
+//    @ViewBuilder
+//    var cover: some View {
+//        if let cover = model.image {
+//            Image(uiImage: cover)
+//                .resizable()
+//                .scaledToFit()
+////                .scaledToFill()
+//                .cornerRadius(10)
+////                .frame(minHeight: 150, maxHeight: 400, alignment: .center)
+//                .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
+//        } else {
+//            Image(systemName: "photo")
+//                .resizable()
+//                .scaledToFit()
+//                .padding(100)
+////                .frame(minHeight: 150, maxHeight: 400, alignment: .center)
+//                .background {
+//                    Color.gray.opacity(0.2)
+//                }
+//                .clipShape(.ellipse)
+//                .onAppear {
+//                    guard let url = manga.mainPicture else { return }
+//                    model.getImage(from: url)
+//                }
+//        }
+//    }
 }
 
 #Preview {

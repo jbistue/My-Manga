@@ -27,32 +27,37 @@ struct MangaListView: View {
                     
                     LazyVStack {
                         ForEach(model.mangas) { manga in
-//                            NavigationLink(destination: Text("Detalle del Manga \(manga.id)")) {
                             NavigationLink(destination: MangaDetailView(manga: manga)) {
                                 RowListView(manga: manga)
-//                                Text("[#\(manga.id)] \(manga.title ?? "N/A")")
-//                                    .foregroundColor(.primary)
+                                    .onAppear {
+                                        if let index = model.mangas.firstIndex(where: { $0.id == manga.id }),
+                                           index >= model.mangas.count - 8 { // faltan 8 para el final
+                                            Task {
+                                                await model.fetchFilteredMangas()
+                                            }
+                                        }
+                                    }
                             }
+                            
                         }
                     }
                     .padding(.horizontal, 16)
-                    .background(
-                        GeometryReader { proxy in
-                            Color.clear
-                                .onChange(of: proxy.frame(in: .global).minY) { _, newValue in
-                                    let contentHeight = proxy.size.height
-                                    let offsetY = newValue
-                                    let visibleBottom = contentHeight + offsetY
-                                    
-                                    if visibleBottom < screenHeight + 200 {
-                                        Task {
-                                            await model.fetchFilteredMangas()
-//                                            await model.fetchMangas()
-                                        }
-                                    }
-                                }
-                        }
-                    )
+//                    .background(
+//                        GeometryReader { proxy in
+//                            Color.clear
+//                                .onChange(of: proxy.frame(in: .global).minY) { _, newValue in
+//                                    let contentHeight = proxy.size.height
+//                                    let offsetY = newValue
+//                                    let visibleBottom = contentHeight + offsetY
+//                                    
+//                                    if visibleBottom < screenHeight + 200 {
+//                                        Task {
+//                                            await model.fetchFilteredMangas()
+//                                        }
+//                                    }
+//                                }
+//                        }
+//                    )
                     .background(
                         GeometryReader { geo in
                             Color.clear
@@ -96,7 +101,6 @@ struct MangaListView: View {
                     
                     debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                         DispatchQueue.main.async {
-//                            print("search/mangasContains/\(newValue)")
                             model.mangaFilter = "search/mangasContains/\(newValue.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current))"
                         }
                     }
@@ -119,8 +123,6 @@ struct MangaListView: View {
         }
         .task {
             await model.fetchFilteredMangas()
-//                await model.fetchMangas()
-//                await model.getMangas(page: 5, per: 30)
         }
 
     }

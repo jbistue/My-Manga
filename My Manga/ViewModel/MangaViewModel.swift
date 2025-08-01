@@ -12,12 +12,14 @@ import SwiftUI
 final class MangaViewModel {
     private let repository: NetworkRepository
     private let loader = MangaDataLoader()
+    private(set) var mangasDict: [Int: Manga] = [:]  // Diccionario para acceso rápido por id
     
     var demographics = [String]()
     var genres = [String]()
     var themes = [String]()
     var authors = [Author]()
-    var manga: Manga? = nil
+    
+//    var manga: Manga? = nil
     var mangas: [Manga] = []
     var mangaFilter = "list/mangas"
     var menuLabel = String(localized: "All")
@@ -59,73 +61,57 @@ extension MangaViewModel {
         guard !isLoading, hasMorePages else { return }
 
         isLoading = true
-
-//        if reset {
-//            currentPage = 1
-//            mangas = []
-//            hasMorePages = true
-//        }
+        defer { isLoading = false }
             
         do {
-//            let mangaNewItems = try await repository.getFilteredMangas(filter: mangaFilter, page: currentPage, per: perPage)
             let mangaNewItems = try await repository.getMangasBy(filter: mangaFilter, page: currentPage, per: perPage)
 
-            if mangaNewItems.items.isEmpty {
+            if mangaNewItems.isEmpty {
                 hasMorePages = false
             } else {
-                mangas.append(contentsOf: mangaNewItems.items)
+                // Actualizar el diccionario con los nuevos mangas antes de añadirlos al array
+                for manga in mangaNewItems {
+                    mangasDict[manga.id] = manga
+                }
+                mangas.append(contentsOf: mangaNewItems)
                 currentPage += 1
             }
         } catch {
                 errorMessage = error.localizedDescription
         }
-            
-        isLoading = false
     }
     
-    func getMangaDetail(id: Int) async {
-        do {
-            manga = try await repository.getMangaDetail(manga: id)
-        } catch {
-            errorMessage = error.localizedDescription
-        }
-    }
-}
-
-//    func fetchMangas(reset: Bool = false) async {
-//    func fetchMangas() async {
-//        guard !isLoading, hasMorePages else { return }
-//
-//        isLoading = true
-//
-////        if reset {
-////            currentPage = 1
-////            mangas = []
-////            hasMorePages = true
-////        }
-//            
+//    func getMangaDetail(id: Int) async {
 //        do {
-//            let mangaNewItems = try await repository.getMangas(page: currentPage, per: perPage)
-//
-//            if mangaNewItems.items.isEmpty {
-//                hasMorePages = false
-//            } else {
-//                mangas.append(contentsOf: mangaNewItems.items)
-//                currentPage += 1
-//            }
-//        } catch {
-//                errorMessage = error.localizedDescription
-//        }
-//            
-//        isLoading = false
-//        }
-
-//    func getMangas(page: Int, per: Int) async {
-//        do {
-//            mangas = try await repository.getMangas(page: page, per: per).items
+//            manga = try await repository.getMangaDetail(manga: id)
 //        } catch {
 //            errorMessage = error.localizedDescription
 //        }
 //    }
-
-
+    
+    // Método para obtener por id (usado en Biblioteca)
+    func mangaBy(id: Int) -> Manga? {
+        mangasDict[id]
+    }
+    
+    func fetchMangaIfNeeded(for id: Int) async {
+//        if mangasDict[id] != nil { return }
+        guard mangasDict[id] == nil else { return }
+        
+        do {
+            let manga = try await repository.getMangaDetail(manga: id)
+            mangasDict[id] = manga
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+//        if mangasDict[id] != nil { return }
+        
+//        await getMangaDetail(id: id)
+//        
+//        if let fetchedManga = manga {
+//            if mangasDict[id] == nil {
+//                mangasDict[id] = fetchedManga
+//            }
+//        }
+    }
+}

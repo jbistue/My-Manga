@@ -7,10 +7,6 @@
 
 import Foundation
 
-//struct MangaResponse: Codable {
-//    let results: [Manga]
-//}
-
 // MARK: - Manga
 struct Manga: Codable, Identifiable, Hashable, Equatable {
     let id: Int

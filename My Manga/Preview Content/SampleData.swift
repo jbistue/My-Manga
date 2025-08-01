@@ -9,11 +9,22 @@ import SwiftUI
 import SwiftData
 
 extension Manga {
-    static let test: Manga = {
-        let url = Bundle.main.url(forResource: "detail", withExtension: "json")!
-        let data = try! Data(contentsOf: url)
-        return try! JSONDecoder.decoder.decode(Manga.self, from: data)
-    }()
+//    static let test: Manga = {
+//        let url = Bundle.main.url(forResource: "detail", withExtension: "json")!
+//        let data = try! Data(contentsOf: url)
+//        return try! JSONDecoder.decoder.decode(Manga.self, from: data)
+//    }()
+    
+    static var test: Manga {
+        guard
+            let url = Bundle.main.url(forResource: "detail", withExtension: "json"),
+            let data = try? Data(contentsOf: url),
+            let manga = try? JSONDecoder.decoder.decode(Manga.self, from: data)
+        else {
+            fatalError("No se pudo cargar 'detail.json'")
+        }
+        return manga
+    }
 }
 
 struct SampleData: PreviewModifier {
@@ -39,29 +50,29 @@ extension PreviewTrait where T == Preview.ViewTraits {
 }
 
 // TODO: Acabar tema carga datos mockeados de los mangas 1 a 30 o a 90
-@Observable
-@MainActor
-final class SampleMangaViewModel {
-    var mangas: [Manga] = []
-    var hasMorePages = true
-    
-    func fetchMangas() {
-        let url = Bundle.main.url(forResource: "manga_p1_p10", withExtension: "json")!
-        let data = try! Data(contentsOf: url)
-        let mangaP1P30 = try! JSONDecoder().decode(Mangas.self, from: data)
-        mangas.append(contentsOf: mangaP1P30.items)
-        hasMorePages = false
-    }
-}
+//@Observable
+//@MainActor
+//final class SampleMangaViewModel {
+//    var mangas: [Manga] = []
+//    var hasMorePages = true
+//    
+//    func fetchMangas() {
+//        let url = Bundle.main.url(forResource: "manga_p1_p10", withExtension: "json")!
+//        let data = try! Data(contentsOf: url)
+//        let mangaP1P30 = try! JSONDecoder().decode(Mangas.self, from: data)
+//        mangas.append(contentsOf: mangaP1P30.items)
+//        hasMorePages = false
+//    }
+//}
 
-struct PreviewRepository: NetworkRepository {
-    var mangas: [Manga] = []
+//struct PreviewRepository: NetworkRepository {
+//    var mangas: [Manga] = []
 //    var currentPage = 1
 //    private let perPage = 30
 //    var isLoading = false
-    var hasMorePages = true
-    
-    mutating func fetchMangas() {
+//    var hasMorePages = true
+//    
+//    mutating func fetchMangas() {
 //        guard !isLoading, hasMorePages else { return }
 //
 //        isLoading = true
@@ -72,13 +83,13 @@ struct PreviewRepository: NetworkRepository {
 //            return []
 //        }
         
-        let url = Bundle.main.url(forResource: "manga_p1_p30", withExtension: "json")!
-        let data = try! Data(contentsOf: url)
-        let mangaP1P30 = try! JSONDecoder().decode(Mangas.self, from: data)
-        mangas.append(contentsOf: mangaP1P30.items)
+//        let url = Bundle.main.url(forResource: "manga_p1_p30", withExtension: "json")!
+//        let data = try! Data(contentsOf: url)
+//        let mangaP1P30 = try! JSONDecoder().decode(Mangas.self, from: data)
+//        mangas.append(contentsOf: mangaP1P30.items)
 //        return mangaP1P30.items
-        hasMorePages = false
-    }
+//        hasMorePages = false
+//    }
     
 //    func loadLibraryItems() -> [LibraryItem] {
 //        guard let url = Bundle.main.url(forResource: "library", withExtension: "json"),
@@ -116,4 +127,4 @@ struct PreviewRepository: NetworkRepository {
 //        let data = try! Data(contentsOf: url)
 //        return try! JSONDecoder.decoder.decode(Manga.self, from: data)
 //    }
-}
+//}

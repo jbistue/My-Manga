@@ -26,8 +26,10 @@ struct LibraryView: View {
     @State private var selectedCollectionStatus: CollectionStatus = .reading
     @State private var previousStatus: CollectionStatus = .reading
    
-    @Namespace private var namespace
+//    @Namespace private var namespace
     @Namespace private var segmentedControl
+    
+    let sharedImageModel = AsyncImageViewModel()
     
 //  TODO: Solucionar problema transiciones entre Reading,Complete e Incomplete
     var transitionEdge: Edge {
@@ -92,20 +94,38 @@ struct LibraryView: View {
 //            return .leading
 //        }
     }
+    
+//    func fetchMangaIfNeeded(for id: Int) async {
+//        if detailsDict[id] != nil { return }
+//        
+//        await model.getMangaDetail(id: id)
+//        
+//        if let fetchedManga = model.manga {
+//            if detailsDict[id] == nil {
+//                detailsDict[id] = fetchedManga
+//            }
+//        }
+//    }
   
     var body: some View {
         NavigationStack {
             VStack {
                 if selectedCollectionStatus == .reading {
-                    LibraryItemsView(predicate: #Predicate { $0.readingVolume != nil }, namespace: namespace)
+//                    LibraryItemsView(predicate: #Predicate { $0.readingVolume != nil }, namespace: namespace)
+                    LibraryItemsView(predicate: #Predicate { $0.readingVolume != nil }, detailsDict: $detailsDict)
+                        .environment(sharedImageModel)
                         .transition(.move(edge: .leading))
 //                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
                 } else if selectedCollectionStatus == .complete {
-                    LibraryItemsView(predicate: #Predicate { $0.completeCollection }, namespace: namespace)
+//                    LibraryItemsView(predicate: #Predicate { $0.completeCollection }, namespace: namespace)
+                    LibraryItemsView(predicate: #Predicate { $0.completeCollection }, detailsDict: $detailsDict)
+                        .environment(sharedImageModel)
                         .transition(.move(edge: transitionEdge))
 //                        .transition(.asymmetric(insertion: .move(edge: insertTransitionEdge), removal: .move(edge: removeTransitionEdge)))
                 } else {
-                    LibraryItemsView(predicate: #Predicate { !$0.completeCollection }, namespace: namespace)
+//                    LibraryItemsView(predicate: #Predicate { !$0.completeCollection }, namespace: namespace)
+                    LibraryItemsView(predicate: #Predicate { !$0.completeCollection }, detailsDict: $detailsDict)
+                        .environment(sharedImageModel)
                         .transition(.move(edge: .trailing))
 //                        .transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))
                 }
@@ -141,6 +161,19 @@ struct LibraryView: View {
             .safeAreaPadding()
             .animation(.easeInOut, value: selectedCollectionStatus)
             .navigationTitle(Text("Library"))
+//            .navigationDestination(for: Manga.self) { manga in
+//                Text("Detail for Manga")
+////                MangaDetailView(manga: manga)
+//////                    .navigationTransition(.zoom(sourceID: "cover_\(manga.id)", in: namespace))
+//            }
+        }
+        .task {
+//            for item in mangas {
+//                if detailsDict[item.id] == nil {
+//                    await fetchMangaIfNeeded(for: item.id)
+//                }
+//            }
+//            await fetchMangaIfNeeded(for: item.id)
         }
 //        .onAppear {
 //            mangas = loadLibraryItems()
@@ -154,6 +187,10 @@ struct LibraryView: View {
                 }
             }
         }
+//        .navigationDestination(for: Manga.self) { manga in
+//            MangaDetailView(manga: manga)
+//                .navigationTransition(.zoom(sourceID: "cover_\(manga.id)", in: namespace))
+//        }
     }
 }
 

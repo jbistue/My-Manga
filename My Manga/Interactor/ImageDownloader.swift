@@ -62,9 +62,15 @@ actor ImageDownloader {
     }
     
     private func resizeImage(_ image: UIImage) async -> UIImage? {
-        let scale = image.size.width / 512
-        let height = image.size.height / scale
-        return await image.byPreparingThumbnail(ofSize: .init(width: 512, height: height))
+        guard image.size.width > 0, image.size.height > 0 else {
+            return nil
+        }
+        
+        let targetWidth: CGFloat = 512
+        let scale = image.size.width / targetWidth
+        let height = max(1, image.size.height / scale)
+        
+        return await image.byPreparingThumbnail(ofSize: .init(width: targetWidth, height: height))
     }
     
     nonisolated func urlDoc(url: URL) -> URL {

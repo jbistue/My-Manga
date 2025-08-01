@@ -17,7 +17,7 @@ final class TestContainer {
         self.modelContext = modelContext
     }
     
-    var urlLibrary: URL {
+    var urlLibrary: URL? {
         Bundle.main.url(forResource: "library", withExtension: "json")!
     }
     
@@ -26,7 +26,12 @@ final class TestContainer {
     }
     
     func loadLibraryItems() throws {
-        let data = try Data(contentsOf: urlLibrary)
+        guard let url = urlLibrary else {
+            print("No se encontró 'library.json' en el bundle")
+            return
+        }
+        
+        let data = try Data(contentsOf: url)
         let libraryItems = try decoder.decode([LibraryItem].self, from: data)
         libraryItems.map {
             LibraryItemDB(id: $0.id, completedCollection: $0.completeCollection, volumesOwned: $0.volumesOwned, readingVolume: $0.readingVolume)

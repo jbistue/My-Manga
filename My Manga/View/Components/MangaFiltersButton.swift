@@ -13,7 +13,7 @@ struct MangaFiltersButton: ViewModifier {
     func body(content: Content) -> some View {
         content
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
+                ToolbarItem(placement: .topBarLeading) {
                     Menu(model.menuLabel) {
                         Button(String(localized: "All")) {
                             model.menuLabel = String(localized: "All")

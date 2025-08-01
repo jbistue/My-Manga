@@ -14,10 +14,7 @@ protocol NetworkRepository: NetworkInteractor, Sendable {
     func getGenres() async throws(NetworkError) -> [String]
     func getThemes() async throws(NetworkError) -> [String]
     func getAuthors() async throws(NetworkError) -> [Author]
-//    func getMangas(page: Int, per: Int) async throws(NetworkError) -> Mangas
-    func getMangasBy(filter: String, page: Int, per: Int) async throws(NetworkError) -> Mangas
-//    func getFilteredMangas(filter: String, page: Int, per: Int) async throws(NetworkError) -> Mangas
-//    func getSearchedMangas(text: String, page: Int, per: Int) async throws(NetworkError) -> Mangas
+    func getMangasBy(filter: String, page: Int, per: Int) async throws(NetworkError) -> [Manga]
     func getMangaDetail(manga: Int) async throws(NetworkError) -> Manga
 }
 
@@ -39,23 +36,11 @@ extension NetworkRepository {
     func getAuthors() async throws(NetworkError) -> [Author] {
         try await getJSON(.get(url: .authors, token: token), type: [Author].self)
     }
-
-//    func getMangas(page: Int, per: Int) async throws(NetworkError) -> Mangas {
-//        try await getJSON(.get(url: .mangas(page: page, per: per), token: token), type: Mangas.self)
-//    }
-    
-    func getMangasBy(filter: String, page: Int, per: Int) async throws(NetworkError) -> Mangas {
-        try await getJSON(.get(url: .filterOrSearchMangas(by: filter, page: page, per: per), token: token), type: Mangas.self)
+   
+    func getMangasBy(filter: String, page: Int, per: Int) async throws(NetworkError) -> [Manga] {
+        try await getJSON(.get(url: .filterOrSearchMangas(by: filter, page: page, per: per), token: token), type: Mangas.self).items
     }
-    
-//    func getFilteredMangas(filter: String, page: Int, per: Int) async throws(NetworkError) -> Mangas {
-//        try await getJSON(.get(url: .filteredMangas(by: filter, page: page, per: per), token: token), type: Mangas.self)
-//    }
-//    
-//    func getSearchedMangas(text: String, page: Int, per: Int) async throws(NetworkError) -> Mangas {
-//        try await getJSON(.get(url: .searchedMangas(contains: text, page: page, per: per), token: token), type: Mangas.self)
-//    }
-    
+        
     func getMangaDetail(manga: Int) async throws(NetworkError) -> Manga {
         try await getJSON(.get(url: .manga(id: manga), token: token), type: Manga.self)
     }
