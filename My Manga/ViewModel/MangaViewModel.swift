@@ -11,8 +11,8 @@ import SwiftUI
 @MainActor
 final class MangaViewModel {
     private let repository: NetworkRepository
-    private let loader = MangaDataLoader()
-    private(set) var mangasDict: [Int: Manga] = [:]  // Diccionario para acceso rápido por id
+    private let loader = ClassificationsLoader()
+    private(set) var mangasDict: [Int: Manga] = [:]
     
     var demographics = [String]()
     var genres = [String]()
@@ -69,7 +69,6 @@ extension MangaViewModel {
             if mangaNewItems.isEmpty {
                 hasMorePages = false
             } else {
-                // Actualizar el diccionario con los nuevos mangas antes de añadirlos al array
                 for manga in mangaNewItems {
                     mangasDict[manga.id] = manga
                 }
@@ -81,22 +80,29 @@ extension MangaViewModel {
         }
     }
     
-//    func getMangaDetail(id: Int) async {
+//    func getMangaDetail(id: Int) async -> Manga? {
 //        do {
-//            manga = try await repository.getMangaDetail(manga: id)
+//            let manga = try await repository.getMangaDetail(manga: id)
+//            return manga
 //        } catch {
 //            errorMessage = error.localizedDescription
+//            return nil
 //        }
+////        return manga
 //    }
     
-    // Método para obtener por id (usado en Biblioteca)
     func mangaBy(id: Int) -> Manga? {
-        mangasDict[id]
+        print("Devolviendo Manga del diccionario, ID:", id, mangasDict[id]?.title ?? "No encontrado")
+        return mangasDict[id]
     }
     
     func fetchMangaIfNeeded(for id: Int) async {
-//        if mangasDict[id] != nil { return }
-        guard mangasDict[id] == nil else { return }
+        print("Fetching manga if needed for item ID:", id)
+        
+        guard !isLoading && mangasDict[id] == nil else { return }
+        
+        isLoading = true
+        defer { isLoading = false }
         
         do {
             let manga = try await repository.getMangaDetail(manga: id)
@@ -104,14 +110,5 @@ extension MangaViewModel {
         } catch {
             errorMessage = error.localizedDescription
         }
-//        if mangasDict[id] != nil { return }
-        
-//        await getMangaDetail(id: id)
-//        
-//        if let fetchedManga = manga {
-//            if mangasDict[id] == nil {
-//                mangasDict[id] = fetchedManga
-//            }
-//        }
     }
 }

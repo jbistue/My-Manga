@@ -18,6 +18,15 @@ actor ImageDownloader {
     private var cache: [URL: ImageStatus] = [:]
     
     func image(for url: URL) async throws -> UIImage {
+        // TODO: PRIMERO mirar si ya está en disco -> no en ejemplo pelis de Arturo, no sé si mejora algo
+        let urlDoc = urlDoc(url: url)
+        
+        if FileManager.default.fileExists(atPath: urlDoc.path),
+            let data = try? Data(contentsOf: urlDoc),
+            let image = UIImage(data: data) {
+            return image
+        }
+        
         if let imageStatus = cache[url] {
             switch imageStatus {
             case .downloading(let task): return try await task.value

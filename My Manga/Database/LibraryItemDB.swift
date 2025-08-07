@@ -4,6 +4,7 @@
 //
 //  Created by Javier Bistue on 7/7/25.
 //
+
 import Foundation
 import SwiftData
 
@@ -14,9 +15,9 @@ final class LibraryItemDB {
     var volumesOwned: [Int]
     var readingVolume: Int?
     
-    init(id: Int, completedCollection: Bool, volumesOwned: [Int], readingVolume: Int?) {
+    init(id: Int, completeCollection: Bool, volumesOwned: [Int], readingVolume: Int?) {
         self.id = id
-        self.completeCollection = completedCollection
+        self.completeCollection = completeCollection
         self.volumesOwned = volumesOwned
         self.readingVolume = readingVolume
     }

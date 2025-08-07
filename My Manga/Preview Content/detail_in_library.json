@@ -1,0 +1,54 @@
+{
+    "titleEnglish": "Yokohama Kaidashi Kikou",
+    "chapters": 142,
+    "url": "\"https://myanimelist.net/manga/4/Yokohama_Kaidashi_Kikou\"",
+    "background": "Three drama CDs were released in 2002. In all three, Alpha is voiced by Hekiru Shiina and Kokone by Akiko Nakagawa. Both of whom voiced the same characters in the two OVA series. A novel based on Yokohama Kaidashi Kikou called Yokohama Kaidashi Kikou Novel: Seeing, Walking, Being Glad, written by Teriha Katsuki, was published by Kodansha on 23 October 2008. Set long after the conclusion of the manga series, it tells the story of a boy robot named Omega and his search for the legendary Cafe Alpha. (Source: Wikipedia) In 2007, the series won the Seiun Award for Best Manga. Yokohama Kaidashi Kikou has been published in English by Seven Seas Entertainment as omnibus volumes since August 9, 2022.",
+    "endDate": "2006-02-25T00:00:00Z",
+    "titleJapanese": "ヨコハマ買い出し紀行",
+    "status": "finished",
+    "genres": [
+        {
+            "id": "4C13067F-96FF-4F14-A1C0-B33215F24E0B",
+            "genre": "Award Winning"
+        },
+        {
+            "id": "4312867C-1359-494A-AC46-BADFD2E1D4CD",
+            "genre": "Drama"
+        },
+        {
+            "id": "536445E3-CEF5-49F7-B22B-6CD9807F0744",
+            "genre": "Slice of Life"
+        },
+        {
+            "id": "2DEDC015-82DA-4EF4-B983-F0F58C8F689E",
+            "genre": "Sci-Fi"
+        }
+    ],
+    "score": 8.68,
+    "themes": [
+        {
+            "id": "263559F4-574F-4BA8-8840-2AEB445CD6BD",
+            "theme": "Iyashikei"
+        }
+    ],
+    "title": "Yokohama Kaidashi Kikou",
+    "startDate": "1994-04-25T00:00:00Z",
+    "demographics": [
+        {
+            "id": "CE425E7E-C7CD-42DB-ADE3-1AB9AD16386D",
+            "demographic": "Seinen"
+        }
+    ],
+    "sypnosis": "In a post-apocalyptic world where an environmental disaster led to the eruption of Mt. Fuji and the inundation of Yokohama, the age of humans is in its twilight. Alpha Hatsuseno is an android and the namesake of a small cafe outside Yokohama. As her owner is away on a trip indefinitely, she has been left responsible for running the cafe. Although she rarely gets any customers, Alpha remains outgoing and cheerful.\n\nWhile Alpha awaits her owner's homecoming, she explores the vicinity with her scooter and camera. Throughout her journeys, she meets new people and other androids, making memories along the way.\n\nYokohama Kaidashi Kikou is a beautiful, laid-back story centered around Alpha's daily activities, emphasizing the passing of time in everyday life.\n\n[Written by MAL Rewrite]",
+    "mainPicture": "\"https://cdn.myanimelist.net/images/manga/1/171813l.jpg\"",
+    "volumes": 14,
+    "id": 4,
+    "authors": [
+        {
+            "firstName": "Hitoshi",
+            "role": "Story & Art",
+            "lastName": "Ashinano",
+            "id": "EC4982FD-4793-4A1A-B956-D2E57895BB57"
+        }
+    ]
+}

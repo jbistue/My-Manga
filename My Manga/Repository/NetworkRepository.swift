@@ -47,7 +47,5 @@ extension NetworkRepository {
 }
 
 struct Repository: NetworkRepository {
-//    let token: String? = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjN2JmMTUwNGMwNWVmNjY4MTlkZGE1ZjkyZTAwOTg1MyIsIm5iZiI6MTU1NDQwODEwMy44NzM5OTk4LCJzdWIiOiI1Y2E2NjJhN2MzYTM2ODYxNDYxNzBkMTMiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.prtR6kaWEp9nhU67CbUfFMNMhcoqxdDbGJyrevDJmGw"
-    
     let decoder: JSONDecoder = .decoder
 }

@@ -1,6 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
     "-" : {
       "localizations" : {
         "es" : {
@@ -11,21 +14,15 @@
         }
       }
     },
-    "···" : {
+    "(%lld)" : {
 
     },
-    "(%lld/%lld)" : {
+    "(%lld/%@)" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "(%1$lld/%2$lld)"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "(%1$lld/%2$lld)"
+            "value" : "(%1$lld/%2$@)"
           }
         }
       }
@@ -111,6 +108,15 @@
         }
       }
     },
+    "**Owned volumes:** %@" : {
+
+    },
+    "**Pending volumes:** %@" : {
+
+    },
+    "**Reading volume:**" : {
+
+    },
     "**Score:** %@" : {
       "localizations" : {
         "es" : {
@@ -120,6 +126,12 @@
           }
         }
       }
+    },
+    "**Select volumes to add:**" : {
+
+    },
+    "**Selected:** %lld" : {
+
     },
     "**Start:** %@" : {
       "extractionState" : "manual",
@@ -239,6 +251,9 @@
         }
       }
     },
+    "Add Item" : {
+
+    },
     "All" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -249,6 +264,9 @@
           }
         }
       }
+    },
+    "All volumes owned" : {
+
     },
     "Authors" : {
       "extractionState" : "manual",
@@ -325,6 +343,12 @@
         }
       }
     },
+    "Deselect All" : {
+
+    },
+    "Detail" : {
+
+    },
     "Detalle del ítem %lld" : {
 
     },
@@ -370,9 +394,6 @@
           }
         }
       }
-    },
-    "Hello, World!" : {
-
     },
     "Home" : {
       "extractionState" : "manual",
@@ -439,6 +460,9 @@
         }
       }
     },
+    "Manga data not available" : {
+
+    },
     "Mangas" : {
       "localizations" : {
         "es" : {
@@ -448,6 +472,9 @@
           }
         }
       }
+    },
+    "None" : {
+
     },
     "Not Completed" : {
       "localizations" : {
@@ -483,6 +510,15 @@
         }
       }
     },
+    "Reading volume:" : {
+
+    },
+    "Reading volume: %@" : {
+
+    },
+    "Save" : {
+
+    },
     "Search" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -503,6 +539,18 @@
           }
         }
       }
+    },
+    "Select All" : {
+
+    },
+    "Select an item" : {
+
+    },
+    "Select volumes to add:" : {
+
+    },
+    "Selected: %lld" : {
+
     },
     "Settings" : {
       "extractionState" : "manual",

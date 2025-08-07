@@ -8,25 +8,38 @@
 import SwiftUI
 
 struct LibraryItemCellView: View {
+//    @Environment(\.modelContext) private var modelContext
+//    @Environment(MangaViewModel.self) var model
+    
+//    @State private var mangaItem: Manga? = nil
     @State private var isFormPresented: Bool = false
     
     let libraryItem: LibraryItemDB
     let mangaItem: Manga?
     
+//    init(libraryItem: LibraryItemDB) {
+//        self.libraryItem = libraryItem
+//    }
+    
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-//            cover
-//            MangaImageView(url: mangaItem?.mainPicture)
-//            MangaImageView(manga: mangaItem)
-//                .frame(minHeight: 50, maxHeight: 100, alignment: .center)
+            MangaImageView(url: mangaItem?.mainPicture)
+//                .scaledToFit()
+                .frame(maxWidth: 70, minHeight: 50, maxHeight: 100, alignment: .center)
 //                .padding(.bottom, 16)
             
             VStack(alignment: .leading) {
                 HStack {
-                    Text("# \(libraryItem.id)")
+//                    Text("# \(libraryItem.id)")
                     
                     if let title = mangaItem?.title {
                         Text(title)
+                    } else {
+                        Text(String(localized: "Manga data not available"))
+                            .foregroundColor(.red)
+                        
+                        Image(systemName: "exclamationmark.triangle")
+                            .foregroundColor(.red)
                     }
                     
                     Spacer()
@@ -34,34 +47,31 @@ struct LibraryItemCellView: View {
                     Button {
                         isFormPresented = true
                     } label: {
-//                        Text("···")
                         Image(systemName: "ellipsis.circle")
                             .font(.title2)
                             .fontWeight(.light)
-//                            .frame(width: 25, height: 25)
-//                            .foregroundColor(.white)
-//                            .background(
-//                                Circle()
-//                                    .fill(Color.primary.opacity(0.3))
-//                            )
                     }
+                    .disabled(mangaItem == nil)
                 }
                 .font(.headline)
+                .padding(.bottom, 2)
                 
                 HStack {
-                    Text(libraryItem.completeCollection ? "Completed" : "Not Completed")
+                    Text(libraryItem.completeCollection ? "Complete" : "Incomplete")
                     
-                    Text("(\(libraryItem.volumesOwned.count)/\(mangaItem?.volumes ?? 0))")
+                    let volumes = mangaItem?.volumes ?? 0
+                    Text("(\(libraryItem.volumesOwned.count)/\(volumes > 0 ? "\(volumes)" : "??"))")
                 }
+//                .font(.callout)
                 .font(.subheadline)
                 .foregroundColor(libraryItem.completeCollection ? .green : .red)
+                .padding(.bottom, 2)
                 
-//                Text(libraryItem.volumesOwned.map { String($0) }.joined(separator: ", "))
-                Text(libraryItem.volumesOwned.map { String($0) }.formatted(.list(type: .and)))
-                    .font(.caption)
-                    .foregroundColor(.secondary)
+//                Text(libraryItem.volumesOwned.sorted(by: <).map { String($0) }.formatted(.list(type: .and)))
+//                    .font(.caption)
+//                    .foregroundColor(.secondary)
                 
-                Text(libraryItem.readingVolume.map { "\($0)" } ?? "-")
+                Text("Reading Volume: \(libraryItem.readingVolume.map { "\($0)" } ?? "-")")
                     .font(.caption)
             }
         }
@@ -70,43 +80,35 @@ struct LibraryItemCellView: View {
         .background(Color(.gray.opacity(0.2)))
         .cornerRadius(10)
         .sheet(isPresented: $isFormPresented) {
-            CollectionManagementView(libraryItem: libraryItem, mangaItem: mangaItem)
+            if let manga = mangaItem {
+                CollectionManagementView(mangaItem: manga)
+            }
         }
     }
-//    @ViewBuilder
-//    var cover: some View {
-//        if let cover = model.image {
-//            Image(uiImage: cover)
-//                .resizable()
-//                .scaledToFit()
-////                .scaledToFill()
-//                .cornerRadius(10)
-////                .frame(minHeight: 150, maxHeight: 400, alignment: .center)
-//                .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
-//        } else {
-//            Image(systemName: "photo")
-//                .resizable()
-//                .scaledToFit()
-//                .padding(100)
-////                .frame(minHeight: 150, maxHeight: 400, alignment: .center)
-//                .background {
-//                    Color.gray.opacity(0.2)
-//                }
-//                .clipShape(.ellipse)
-//                .onAppear {
-//                    guard let url = mangaItem?.mainPicture else { return }
-//                    model.getImage(from: url)
-//                }
-//        }
-//    }
 }
 
-#Preview {
+#Preview("Info del Maga disponible de la API") {
+//    @Previewable @Environment(MangaViewModel.self) var model
+//    @Previewable @State var imageModel = AsyncImageViewModel()
+    
     LibraryItemCellView(
         libraryItem: LibraryItemDB(
             id: 42,
-            completedCollection: false,
+            completeCollection: false,
             volumesOwned: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
             readingVolume: 4),
         mangaItem: .test)
+//    .modelContainer(for: LibraryItemDB.self, inMemory: true)
+//    .environment(model)
+//    .environment(imageModel)
+}
+
+#Preview("Info del Maga NO disponible ...") {
+    LibraryItemCellView(
+        libraryItem: LibraryItemDB(
+            id: 42,
+            completeCollection: false,
+            volumesOwned: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
+            readingVolume: 4),
+        mangaItem: nil)
 }

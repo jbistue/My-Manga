@@ -34,7 +34,7 @@ final class TestContainer {
         let data = try Data(contentsOf: url)
         let libraryItems = try decoder.decode([LibraryItem].self, from: data)
         libraryItems.map {
-            LibraryItemDB(id: $0.id, completedCollection: $0.completeCollection, volumesOwned: $0.volumesOwned, readingVolume: $0.readingVolume)
+            LibraryItemDB(id: $0.id, completeCollection: $0.completeCollection, volumesOwned: $0.volumesOwned, readingVolume: $0.readingVolume)
         }.forEach {
             modelContext.insert($0)
         }

@@ -1,5 +1,5 @@
 //
-//  MangaContainer.swift
+//  ClassificationsLoader.swift
 //  My Manga
 //
 //  Created by Javier Bistue on 2/7/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-actor MangaDataLoader {
+actor ClassificationsLoader {
     let repository: NetworkRepository = Repository()
     
     func getDemographics() async throws -> [String] {

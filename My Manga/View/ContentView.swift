@@ -9,40 +9,33 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Environment(MangaViewModel.self) var model
-    
     @Namespace private var namespace
 
     var body: some View {
         TabView {
             Tab("Library", systemImage: "books.vertical.fill") {
-                LibraryView2()
+                LibraryView()
                     .navigationBarTitle("Library")
             }
             
             Tab("Store", systemImage: "bag.fill") {
                 StoreView(namespace: namespace)
-//                MangaListView()
                     .navigationBarTitle("Store")
             }
-            
-//            Tab("Authors", systemImage: "person.2.fill") {
-//                AuthorsView()
-//                    .navigationBarTitle("Authors")
-//            }
         }
         .tabViewStyle(.sidebarAdaptable)
     }
 }
 
 #Preview(traits: .sampleData) {
+//#Preview {
     @Previewable @State var model = MangaViewModel()
+    @Previewable @State var imageModel = AsyncImageViewModel()
     
     ContentView()
         .task {
             model.loadMangaClassifications()
         }
+//        .modelContainer(for: LibraryItemDB.self, inMemory: true)
         .environment(model)
-//        .modelContainer(for: Item.self, inMemory: true)
 }

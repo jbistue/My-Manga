@@ -17,11 +17,8 @@ extension URLSession {
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw NetworkError.nonHTTP
             }
-            // Si el token ha caducado, llamo a refrescarlo y me vuelvo a llamar recursivamente
-//            let string = String(data: data, encoding: .utf8)
-//            print(string ?? "No se pudo decodificar el JSON")
             return (data, httpResponse)
-        } catch let error as NetworkError {     // Si no se añade esto, quedaría `NetworkError.general(NetworkError.nonHTTP)`
+        } catch let error as NetworkError {
             throw error
         } catch {
             throw .general(error)
@@ -37,11 +34,8 @@ extension URLSession {
             guard let httpResponse = response as? HTTPURLResponse else {
                 throw NetworkError.nonHTTP
             }
-            // Si el token ha caducado, llamo a refrescarlo y me vuelvo a llamar recursivamente
-//            let string = String(data: data, encoding: .utf8)
-//            print(string ?? "No se pudo decodificar el JSON")
             return (data, httpResponse)
-        } catch let error as NetworkError {     // Si no se añade esto, quedaría `NetworkError.general(NetworkError.nonHTTP)`
+        } catch let error as NetworkError {
             throw error
         } catch {
             throw .general(error)
