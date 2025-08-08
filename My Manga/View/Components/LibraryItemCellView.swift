@@ -34,6 +34,8 @@ struct LibraryItemCellView: View {
                     
                     if let title = mangaItem?.title {
                         Text(title)
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.leading)
                     } else {
                         Text(String(localized: "Manga data not available"))
                             .foregroundColor(.red)
@@ -56,6 +58,11 @@ struct LibraryItemCellView: View {
                 .font(.headline)
                 .padding(.bottom, 2)
                 
+                Text("Reading Volume: \(libraryItem.readingVolume.map { "\($0)" } ?? "-")")
+                    .font(.footnote)
+                    .foregroundColor(.primary)
+//                    .padding(.bottom, 2)
+                
                 HStack {
                     Text(libraryItem.completeCollection ? "Complete" : "Incomplete")
                     
@@ -65,14 +72,15 @@ struct LibraryItemCellView: View {
 //                .font(.callout)
                 .font(.subheadline)
                 .foregroundColor(libraryItem.completeCollection ? .green : .red)
-                .padding(.bottom, 2)
+//                .padding(.bottom, 2)
                 
 //                Text(libraryItem.volumesOwned.sorted(by: <).map { String($0) }.formatted(.list(type: .and)))
 //                    .font(.caption)
 //                    .foregroundColor(.secondary)
                 
-                Text("Reading Volume: \(libraryItem.readingVolume.map { "\($0)" } ?? "-")")
-                    .font(.caption)
+//                Text("Reading Volume: \(libraryItem.readingVolume.map { "\($0)" } ?? "-")")
+//                    .font(.caption)
+//                    .foregroundColor(.primary)
             }
         }
         .padding()

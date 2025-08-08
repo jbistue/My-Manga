@@ -14,6 +14,19 @@
         }
       }
     },
+    "(%lld of %lld volumes)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "(%1$lld of %2$lld volumes)"
+          }
+        }
+      }
+    },
+    "(%lld volumes)" : {
+
+    },
     "(%lld)" : {
 
     },
@@ -26,6 +39,9 @@
           }
         }
       }
+    },
+    "**%.2f**" : {
+
     },
     "**Authors:** %@" : {
       "localizations" : {
@@ -301,6 +317,7 @@
       }
     },
     "Completed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -473,10 +490,14 @@
         }
       }
     },
+    "No synopsis available" : {
+
+    },
     "None" : {
 
     },
     "Not Completed" : {
+      "extractionState" : "stale",
       "localizations" : {
         "es" : {
           "stringUnit" : {
@@ -514,6 +535,9 @@
 
     },
     "Reading volume: %@" : {
+
+    },
+    "Reading Volume: %@" : {
 
     },
     "Save" : {

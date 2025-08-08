@@ -29,23 +29,26 @@ struct LibraryFilterBar: View {
     @Binding var libraryFilter: LibraryFilter
     
     var body: some View {
-        HStack {
-            ForEach(LibraryFilter.allCases) { option in
-                Button(action: {
-                    libraryFilter = option
-                }) {
-                    Text(option.description)
-                        .font(.footnote)
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 4)
-                        .background(libraryFilter == option ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
-                        .clipShape(Capsule())
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: -24) {
+                ForEach(LibraryFilter.allCases) { option in
+                    Button(action: {
+                        libraryFilter = option
+                    }) {
+                        Text(option.description)
+                            .font(.subheadline)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 4)
+                            .background(libraryFilter == option ? Color.blue.opacity(0.2) : Color.gray.opacity(0.2))
+                            .clipShape(Capsule())
+                    }
+                    .foregroundColor(libraryFilter == option ? .blue : .gray)
+                    .animation(.easeInOut, value: libraryFilter)
                 }
-                .foregroundColor(libraryFilter == option ? .blue : .gray)
-                .animation(.easeInOut, value: libraryFilter)
+                .padding(.horizontal, 16)
             }
+            .padding(.bottom, 10)
         }
-        .padding(.bottom, 14)
     }
 }
 

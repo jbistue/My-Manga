@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct LibraryView: View {
+    @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.modelContext) private var modelContext
     @Environment(MangaViewModel.self) var model
     
@@ -17,6 +18,8 @@ struct LibraryView: View {
     @State private var loadedItems: [(LibraryItemDB, Manga?)] = []
     @State private var libraryFilter: LibraryFilter = .reading
     @State private var searchText = ""
+    @State private var selectedItem: LibraryItemDB?
+//    @State private var showingInspector = false
     
     private var filteredItems: [(LibraryItemDB, Manga?)] {
         loadedItems
@@ -55,20 +58,45 @@ struct LibraryView: View {
                     
                     LazyVStack {
                         ForEach(filteredItems, id: \.0.id) { (item, manga) in
-                            LibraryItemCellView(libraryItem: item, mangaItem: manga)
+                            if sizeClass == .regular {
+                                Button {
+                                    selectedItem = item
+                                } label: {
+                                    LibraryItemCellView(libraryItem: item, mangaItem: manga)
+                                }
+                                .buttonStyle(.plain)
+                                //                            LibraryItemCellView(libraryItem: item, mangaItem: manga)
+                            } else {
+                                NavigationLink(value: item) {
+                                    LibraryItemCellView(libraryItem: item, mangaItem: manga)
+                                }
+                            }
                         }
                     }
+                    .padding(.horizontal, 16)
                 }
                 .navigationTitle(mangasCollection.isEmpty ? Text("") : Text("Library"))
-                .padding(.horizontal, 16)
+//                .padding(.horizontal, 16)
                 .scrollIndicators(.hidden)
                 .searchable(text: $searchText, prompt: String(localized: "Search by title"))
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
                 .scrollDismissesKeyboard(.interactively)
+                .onChange(of: libraryFilter) { _, _ in selectedItem = nil }
+                .onChange(of: searchText) { _, _ in selectedItem = nil }
             }
         } detail: {
-            Text("Select an item")
+            if let selected = selectedItem {
+                ItemDBDetailView(libraryItem: selected, mangaItem: model.mangaBy(id: selected.id))
+            } else {
+                Text("Select an item")
+            }
+        }
+        .navigationDestination(for: LibraryItemDB.self) { item in
+            ItemDBDetailView(
+                libraryItem: item,
+                mangaItem: model.mangaBy(id: item.id)
+            )
         }
         .task {
             await fetchDetailsOfAllLibraryItems()

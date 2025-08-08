@@ -40,90 +40,15 @@ struct CollectionManagementView: View {
     
     var body: some View {
         ScrollView {
-//            if mangaItem != nil {
-                
-//                MangaImageView(url: mangaItem?.mainPicture)
-//                    .scaledToFill()
-//                    .frame(height: 350, alignment: .top)
-//                    .clipped()
-//                    .frame(maxWidth: .infinity)
-//                    .overlay(
-//                        LinearGradient(
-//                            gradient: Gradient(stops: [
-//                                .init(color: .clear, location: 0.0),
-//                                .init(color: Color(.systemBackground).opacity(0.5), location: 0.7),
-//                                .init(color: Color(.systemBackground).opacity(1.0), location: 1.0)
-//                            ]),
-//                            startPoint: .top,
-//                            endPoint: .bottom
-//                        )
-//                    )
-                
-                VStack(alignment: .leading) {
-//                    Text(mangaItem?.title ?? "Unknown Manga")
-                    Text(mangaItem.title ?? "Unknown Manga")
-                        .font(.title)
-                        .bold()
-                        .padding(.vertical, 16)
-                    
-//                    HStack {
-//                        Image(systemName: "star.fill")
-//                            .foregroundColor(.yellow)
-//                        Text("**\((mangaItem?.score ?? 0.00), specifier: "%.2f")**")
-//                        
-//                    }
-//                    .padding(.bottom, 4)
-//                    
-//                    HStack {
-//                        Image(systemName: "bookmark.fill")
-//                        Text(libraryItem?.completeCollection ?? false ? "Complete" : "Incomplete")
-//                        if libraryItem?.completeCollection ?? false {
-//                            Text("(\(libraryItem?.volumesOwned.count ?? mangaItem?.volumes ?? 0) volumes)")
-//                        } else {
-//                            Text("(\(libraryItem?.volumesOwned.count ?? 0) of \(mangaItem?.volumes ?? 0) volumes)")
-//                        }
-//                    }
-//                    .foregroundColor(libraryItem?.completeCollection ?? false ? .green : .red)
-//                    .padding(.bottom, 16)
-                    
-//                    Text(mangaItem?.sypnosis ?? String(localized:"No synopsis available"))
-//                        .font(.callout)
-//                        .italic()
-//                        .foregroundColor(.secondary)
-//                        .lineLimit(4)
-//                        .truncationMode(.tail)
-//                        .multilineTextAlignment(.leading)
-//                        .padding(.bottom, 8)
-//                    
-//                    Text("**Themes:** \(mangaItem?.themes.map { $0.theme }.formatted(.list(type: .and)) ?? "")")
-//                        .font(.callout)
-//                        .padding(.bottom, 2)
-//                    
-//                    Text("**Genres:** \(mangaItem?.genres.map { $0.genre }.formatted(.list(type: .and)) ?? "")")
-//                        .font(.callout)
-//                        .padding(.bottom, 2)
-//                    
-//                    Text("**Demographics:** \(mangaItem?.demographics.map { $0.demographic }.formatted(.list(type: .and)) ?? "")")
-//                        .font(.callout)
-//                        .padding(.bottom, 2)
-//                    
-//                    Text("**Authors:** \(mangaItem?.authors.map { "\($0.firstName) \($0.lastName) (\($0.role))" }.formatted(.list(type: .and)) ?? "")")
-//                        .font(.callout)
-//                        .padding(.bottom, 2)
-                }
-//                .onAppear {
-//                    print("Library Item ID:", libraryItem?.id ?? "No Library Item")
-//                    loadItem()
-//                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.horizontal, 16)
-                
-            Text(String(libraryItem?.id ?? 0) + " - \(mangaItem.id)")
-                    
-                groupBox
-//                .onAppear() {
-//                    print(libraryItem?.id ?? "No Library Item")
-//                }
+            groupBox
+            
+            // TODO: eliminar este texto, está solo a efecto de pruebas y comprobaciones
+//            Text("Id item biblioteca: \(libraryItem?.id ?? 0)")
+//            Text("Id manga a buscar: \(mangaItem.id)")
+//            
+//            if libraryItem != nil {
+//                Text("Reading volume: \(libraryItem?.readingVolume.map { "\($0)" } ?? "-")")
+//                Text("Selected: \(itemSelectedToRead ?? 0)")
 //            }
         }
         .scrollIndicators(.hidden)
@@ -134,9 +59,6 @@ struct CollectionManagementView: View {
 
 //        .ignoresSafeArea(.all)
 //        .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        .onAppear() {
-//            print(libraryItem?.id ?? "No Library Item")
-//        }
 //        .overlay {
 //            if mangaItem == nil {
 //                ContentUnavailableView {
@@ -152,11 +74,12 @@ struct CollectionManagementView: View {
     var groupBox: some View {
         GroupBox {
             VStack(alignment: .leading, spacing: 16) {
-//                Text("**Pending volumes:** \(pendingVolumes.map { String($0) }.formatted(.list(type: .and)))")
-//                    .font(.callout)
-//                    .frame(maxWidth: .infinity, alignment: .leading)
-//                    .padding(.bottom, 10)
-//                
+                Text(mangaItem.title ?? "Unknown Manga")
+                    .font(.title)
+                    .foregroundColor(.primary)
+                    .bold()
+                    .padding(.vertical, 16)
+
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
                         Text("**Select volumes to add:**")
@@ -177,6 +100,7 @@ struct CollectionManagementView: View {
                                     }
                                 }
                             }
+        // TODO: este formato de botón se usa en tres sitios, quizás convendría crear un estilo de botón personalizado
                             .font(.subheadline)
                             .padding(6)
                             .background(Color.accentColor.opacity(0.1))
@@ -209,12 +133,7 @@ struct CollectionManagementView: View {
                     }
                 }
                 
-// TODO: Eliminar este texto, está solo a efecto de pruebas
                 if libraryItem != nil {
-                    
-                    Text("Reading volume: \(libraryItem?.readingVolume.map { "\($0)" } ?? "-")")
-                    Text("**Selected:** \(itemSelectedToRead ?? 0)")
-                    
                     HStack {
                         Text("**Reading volume:**")
                             .font(.callout)
@@ -232,6 +151,24 @@ struct CollectionManagementView: View {
                         .pickerStyle(.wheel)
                         .frame(width: 80)
                         
+                        Button("Next") {
+                            withAnimation {
+                                guard let current = itemSelectedToRead,
+                                      let index = libraryItem?.volumesOwned.firstIndex(of: current),
+                                      ((libraryItem?.volumesOwned.indices.contains(index + 1)) != nil)
+                                else {
+                                    itemSelectedToRead = libraryItem?.volumesOwned.first
+                                    return
+                                }
+                                itemSelectedToRead = libraryItem?.volumesOwned[index + 1]
+                            }
+                        }
+                        .font(.subheadline)
+                        .padding(6)
+                        .background(Color.accentColor.opacity(0.1))
+                        .foregroundColor(.accentColor)
+                        .cornerRadius(6)
+
                         Button("None") {
                             withAnimation {
                                 itemSelectedToRead = nil
@@ -242,45 +179,24 @@ struct CollectionManagementView: View {
                         .background(Color.accentColor.opacity(0.1))
                         .foregroundColor(.accentColor)
                         .cornerRadius(6)
-                        //                    Button {
-                        //                        itemSelectedToRead = nil
-                        //                    } label: {
-                        //                        Image(systemName: "xmark.circle")
-                        //                            .font(.title2)
-                        //                            .fontWeight(.light)
-                        //                    }
-                        //MARK: botón para pasar a leer el siguiente volumen, no creo que haga falta (resolver libraryItem nil)
-                        //                    Button {
-                        //                        guard let current = itemSelectedToRead,
-                        //                              let index = libraryItem.volumesOwned.firstIndex(of: current),
-                        //                              libraryItem.volumesOwned.indices.contains(index + 1)
-                        //                        else {
-                        //                            itemSelectedToRead = libraryItem.volumesOwned.first
-                        //                            return
-                        //                        }
-                        //                        itemSelectedToRead = libraryItem.volumesOwned[index + 1]
-                        //                    } label: {
-                        //                        Image(systemName: "chevron.forward.circle")
-                        //                            .font(.title2)
-                        //                            .fontWeight(.light)
-                        //                    }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 
-                Button {
-                    updateLibrary()
-                    dismiss()
-                } label: {
-                    Text("Save")
+                HStack {
+//                    Button("Cancel", role: .cancel) {
+//                        dismiss()
+//                    }
+//                    .buttonStyle(.bordered)
+                    
+                    Button("Save") {
+                        updateLibrary()
+                        dismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
                 }
-                .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
-//            .onAppear {
-//                print("Library Item ID:", libraryItem?.id ?? "No Library Item")
-//                loadItem()
-//            }
         }
     }
     
@@ -292,7 +208,7 @@ struct CollectionManagementView: View {
             
         do {
             let results = try modelContext.fetch(descriptor)
-            libraryItem = results.first // Será nil si no se encuentra
+            libraryItem = results.first
             itemSelectedToRead = libraryItem?.readingVolume
             print("Library item: \(libraryItem?.id ?? 0)")
         } catch {
@@ -329,7 +245,7 @@ struct CollectionManagementView: View {
     }
 }
 
-#Preview("En Librería, con info API", traits: .sampleData) {
+#Preview("En Biblioteca, con info API", traits: .sampleData) {
     CollectionManagementView(
         mangaItem: .testInLibrary)
 }
@@ -347,7 +263,7 @@ struct CollectionManagementView: View {
 //    .environment(imageModel)
 //}
 
-#Preview("No en Librería") {
+#Preview("No en Biblioteca") {
     CollectionManagementView(
         mangaItem: .test)
 }
