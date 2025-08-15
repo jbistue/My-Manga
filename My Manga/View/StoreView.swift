@@ -14,7 +14,6 @@ struct StoreView: View {
     @State private var searchText = ""
     @State private var debounceTimer: Timer?
 
-//    private let screenHeight = UIScreen.main.bounds.height
     let namespace: Namespace.ID
 
     init(namespace: Namespace.ID) {
@@ -30,11 +29,10 @@ struct StoreView: View {
                             CoverView(manga: manga, namespace: namespace)
                                 .cornerRadius(10)
                                 .onAppear {
-            // TODO: prevenir el número de llamadas con un flag
                                     if let index = model.mangas.firstIndex(where: { $0.id == manga.id }),
-                                        index == model.mangas.count - 8 { // faltan 8 para el final ???
+                                        // faltan 8 para el final
+                                        index == model.mangas.count - 8 {
                                         Task {
-                                            print("Precargando mangas...", index, model.mangas.count)
                                             await model.fetchFilteredMangas()
                                         }
                                     }

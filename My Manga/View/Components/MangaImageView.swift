@@ -24,7 +24,8 @@ struct MangaImageView: View {
                 .resizable()
                 .scaledToFit()
                 .padding(100)
-//                .background(Color.gray.opacity(0.2))
+                .foregroundStyle(.primary)
+                .background(Color.gray.opacity(0.2))
                 .clipShape(.circle)
                 .task {
                     guard let url else { return }
@@ -41,5 +42,5 @@ struct MangaImageView: View {
 }
 
 #Preview("Sin imagen") {
-    MangaImageView(url: URL(string: ""))
+    MangaImageView(url: nil)
 }

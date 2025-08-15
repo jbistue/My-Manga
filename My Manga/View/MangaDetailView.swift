@@ -16,11 +16,12 @@ struct MangaDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
-//                print("Voy a mostrar imagen url:", manga.mainPicture)
                 MangaImageView(url: manga.mainPicture)
                     .scaledToFit()
+                    .cornerRadius(10)
                     .frame(minHeight: 150, maxHeight: 400, alignment: .center)
-                    .padding(.bottom, 16)
+                    .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
+                    .padding(.bottom, 20)
 
                 mangaDetails
             }

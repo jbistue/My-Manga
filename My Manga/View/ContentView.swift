@@ -36,6 +36,5 @@ struct ContentView: View {
         .task {
             model.loadMangaClassifications()
         }
-//        .modelContainer(for: LibraryItemDB.self, inMemory: true)
         .environment(model)
 }

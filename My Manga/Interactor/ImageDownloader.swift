@@ -18,7 +18,6 @@ actor ImageDownloader {
     private var cache: [URL: ImageStatus] = [:]
     
     func image(for url: URL) async throws -> UIImage {
-        // TODO: PRIMERO mirar si ya está en disco -> no en ejemplo pelis de Arturo, no sé si mejora algo
         let urlDoc = urlDoc(url: url)
         
         if FileManager.default.fileExists(atPath: urlDoc.path),

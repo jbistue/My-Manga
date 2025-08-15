@@ -21,14 +21,34 @@
             "state" : "new",
             "value" : "(%1$lld of %2$lld volumes)"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%1$lld de %2$lld volúmenes)"
+          }
         }
       }
     },
     "(%lld volumes)" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%lld volúmenes)"
+          }
+        }
+      }
     },
     "(%lld)" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%lld)"
+          }
+        }
+      }
     },
     "(%lld/%@)" : {
       "localizations" : {
@@ -37,11 +57,24 @@
             "state" : "new",
             "value" : "(%1$lld/%2$@)"
           }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(%1$lld/%2$@)"
+          }
         }
       }
     },
     "**%.2f**" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**%.2f**"
+          }
+        }
+      }
     },
     "**Authors:** %@" : {
       "localizations" : {
@@ -125,13 +158,34 @@
       }
     },
     "**Owned volumes:** %@" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Volúmenes descargados:**"
+          }
+        }
+      }
     },
     "**Pending volumes:** %@" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Volúmenes pendientes:**"
+          }
+        }
+      }
     },
     "**Reading volume:**" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Leyendo el volumen:**"
+          }
+        }
+      }
     },
     "**Score:** %@" : {
       "localizations" : {
@@ -144,10 +198,14 @@
       }
     },
     "**Select volumes to add:**" : {
-
-    },
-    "**Selected:** %lld" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**Seleccionar volúmenes para añadir:**"
+          }
+        }
+      }
     },
     "**Start:** %@" : {
       "extractionState" : "manual",
@@ -268,7 +326,7 @@
       }
     },
     "Add Item" : {
-
+      "shouldTranslate" : false
     },
     "All" : {
       "extractionState" : "manual",
@@ -282,7 +340,14 @@
       }
     },
     "All volumes owned" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Colección completa"
+          }
+        }
+      }
     },
     "Authors" : {
       "extractionState" : "manual",
@@ -312,17 +377,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Completa"
-          }
-        }
-      }
-    },
-    "Completed" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Completada"
           }
         }
       }
@@ -361,13 +415,27 @@
       }
     },
     "Deselect All" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deseleccionar todo"
+          }
+        }
+      }
     },
     "Detail" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detalle"
+          }
+        }
+      }
     },
     "Detalle del ítem %lld" : {
-
+      "shouldTranslate" : false
     },
     "Finished" : {
       "extractionState" : "manual",
@@ -454,7 +522,14 @@
       }
     },
     "Item %lld" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Item %lld"
+          }
+        }
+      }
     },
     "JSON error: %@" : {
       "localizations" : {
@@ -478,7 +553,24 @@
       }
     },
     "Manga data not available" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos del Manga no disponibles"
+          }
+        }
+      }
+    },
+    "Manga data not available." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datos del Manga no disponibles."
+          }
+        }
+      }
     },
     "Mangas" : {
       "localizations" : {
@@ -490,19 +582,32 @@
         }
       }
     },
-    "No synopsis available" : {
-
-    },
-    "None" : {
-
-    },
-    "Not Completed" : {
-      "extractionState" : "stale",
+    "Next" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No completada"
+            "value" : "Siguiente"
+          }
+        }
+      }
+    },
+    "No synopsis available" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinopsis no disponible"
+          }
+        }
+      }
+    },
+    "None" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ninguno"
           }
         }
       }
@@ -532,13 +637,24 @@
       }
     },
     "Reading volume:" : {
-
-    },
-    "Reading volume: %@" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leyendo el volumen:"
+          }
+        }
+      }
     },
     "Reading Volume: %@" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leyendo el volumen: %@"
+          }
+        }
+      }
     },
     "Save" : {
 
@@ -565,16 +681,44 @@
       }
     },
     "Select All" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar todo"
+          }
+        }
+      }
     },
     "Select an item" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar un elemento"
+          }
+        }
+      }
     },
     "Select volumes to add:" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionar volúmenes para añadir:"
+          }
+        }
+      }
     },
     "Selected: %lld" : {
-
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seleccionado:"
+          }
+        }
+      }
     },
     "Settings" : {
       "extractionState" : "manual",
@@ -651,6 +795,9 @@
           }
         }
       }
+    },
+    "VOLUMENES PENDIENTES: %@" : {
+
     }
   },
   "version" : "1.0"

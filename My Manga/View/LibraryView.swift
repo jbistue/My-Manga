@@ -16,10 +16,10 @@ struct LibraryView: View {
     @Query(sort: [SortDescriptor(\LibraryItemDB.id)]) private var mangasCollection: [LibraryItemDB]
     
     @State private var loadedItems: [(LibraryItemDB, Manga?)] = []
-    @State private var libraryFilter: LibraryFilter = .reading
+    @State private var libraryFilter: LibraryFilter = .all
     @State private var searchText = ""
     @State private var selectedItem: LibraryItemDB?
-//    @State private var showingInspector = false
+    @State private var lastCollectionCount = 0
     
     private var filteredItems: [(LibraryItemDB, Manga?)] {
         loadedItems
@@ -50,9 +50,18 @@ struct LibraryView: View {
                 } description: {
                     Text(String(localized: "There is no Manga in the library."))
                 }
+// MARK: - Para pruebas: permite añadir unos 1.000 Manga a la colección para comprobar el tiempo de carga inicial
+//                .toolbar {
+//                    ToolbarItem(placement: .topBarLeading) {
+//                        Button {
+//                            addThousandItems()
+//                        } label: {
+//                            Image(systemName: "document.badge.plus")
+//                                .font(.callout)
+//                        }
+//                    }
+//                }
             } else {
-//        NavigationStack {
-//            List {
                 ScrollView {
                     LibraryFilterBar(libraryFilter: $libraryFilter)
                     
@@ -65,7 +74,6 @@ struct LibraryView: View {
                                     LibraryItemCellView(libraryItem: item, mangaItem: manga)
                                 }
                                 .buttonStyle(.plain)
-                                //                            LibraryItemCellView(libraryItem: item, mangaItem: manga)
                             } else {
                                 NavigationLink(value: item) {
                                     LibraryItemCellView(libraryItem: item, mangaItem: manga)
@@ -76,14 +84,31 @@ struct LibraryView: View {
                     .padding(.horizontal, 16)
                 }
                 .navigationTitle(mangasCollection.isEmpty ? Text("") : Text("Library"))
-//                .padding(.horizontal, 16)
-                .scrollIndicators(.hidden)
                 .searchable(text: $searchText, prompt: String(localized: "Search by title"))
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
                 .scrollDismissesKeyboard(.interactively)
                 .onChange(of: libraryFilter) { _, _ in selectedItem = nil }
                 .onChange(of: searchText) { _, _ in selectedItem = nil }
+                .navigationDestination(for: LibraryItemDB.self) { item in
+                    ItemDBDetailView(
+                        libraryItem: item,
+                        mangaItem: model.mangaBy(id: item.id)
+                    )
+                }
+// MARK: - Para pruebas: permite eliminar todos los Manga de la colección
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(role: .destructive) {
+                            deleteAllItems()
+//                            deleteItems(offsets: mangasCollection.indices)
+                        } label: {
+                            Image(systemName: "trash")
+                                .font(.callout)
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
             }
         } detail: {
             if let selected = selectedItem {
@@ -92,39 +117,93 @@ struct LibraryView: View {
                 Text("Select an item")
             }
         }
-        .navigationDestination(for: LibraryItemDB.self) { item in
-            ItemDBDetailView(
-                libraryItem: item,
-                mangaItem: model.mangaBy(id: item.id)
-            )
-        }
         .task {
-            await fetchDetailsOfAllLibraryItems()
-        }
-//        }
-    }
-
-    private func fetchDetailsOfAllLibraryItems() async {
-        var temp: [(LibraryItemDB, Manga?)] = []
-            
-        for item in mangasCollection {
-            if model.mangaBy(id: item.id) == nil {
-                await model.fetchMangaIfNeeded(for: item.id)
+            if !mangasCollection.isEmpty && loadedItems.isEmpty {
+                await loadMangas(for: Array(mangasCollection), batchSize: 20)
+                lastCollectionCount = mangasCollection.count
             }
-            let manga = model.mangaBy(id: item.id)
-            temp.append((item, manga))
         }
-            
-        loadedItems = temp
+        .onChange(of: mangasCollection.count) { _, newCount in
+            if newCount > lastCollectionCount {
+                // Cargar solo los Manga que falten, en caso de haberse añadido nuevos desde Store
+                let loadedIds = Set(loadedItems.map { $0.0.id })
+                let newOnes = mangasCollection.filter { !loadedIds.contains($0.id) }
+                Task { await loadMangas(for: newOnes, batchSize: 20) }
+                lastCollectionCount = newCount
+            }
+        }
+    }
+    
+    @MainActor
+    private func loadSingleManga(id: Int) async -> Manga? {
+        if model.mangaBy(id: id) == nil {
+            await model.fetchMangaIfNeeded(for: id)
+        }
+        return model.mangaBy(id: id)
+    }
+    
+    private func loadMangas(for items: [LibraryItemDB], batchSize: Int = 20) async {
+        // Evitar tares si no hay nada en la Biblioteca
+        guard !items.isEmpty else { return }
+
+        // Mapa id -> item (para reconstruir la tupla al final del lote)
+        let idToItem = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
+        // Solo IDs para no sacar modelos de SwiftData fuera del MainActor
+        let ids = items.map { $0.id }
+
+        for batch in ids.chunked(into: batchSize) {
+            var batchResults: [(LibraryItemDB, Manga?)] = []
+
+            await withTaskGroup(of: (Int, Manga?).self) { group in
+                for id in batch {
+                    group.addTask {
+                        let manga = await loadSingleManga(id: id)
+                        return (id, manga)
+                    }
+                }
+
+                for await (id, manga) in group {
+                    if let item = idToItem[id] {
+                        batchResults.append((item, manga))
+                    }
+                }
+            }
+
+            await MainActor.run {
+                let existing = Set(loadedItems.map { $0.0.id })
+                loadedItems.append(contentsOf: batchResults.filter { !existing.contains($0.0.id) })
+            }
+        }
     }
 
-//    private func deleteItems(offsets: IndexSet) {
-//        withAnimation {
-//            for index in offsets {
-//                modelContext.delete(mangasCollection[index])
+//    private func fetchDetailsOfAllLibraryItems(batchSize: Int = 30) async {
+//    }
+    
+//    private func addThousandItems() {
+//        for manga in model.mangas {
+//            for i in 0..<1000 {
+//                let updatedVolumesOwned = [1]
+//                let newItem = LibraryItemDB(
+//                    id: 1004 + i,
+//                    completeCollection: manga.volumes == updatedVolumesOwned.count,
+//                    volumesOwned: updatedVolumesOwned,
+//                    readingVolume: nil
+//                )
+//                modelContext.insert(newItem)
 //            }
 //        }
 //    }
+    
+    private func deleteAllItems() {
+        withAnimation {
+            for item in mangasCollection {
+                modelContext.delete(item)
+            }
+//            for index in offsets {
+//                modelContext.delete(mangasCollection[index])
+//            }
+        }
+    }
 }
 
 #Preview("Librería con Manga", traits: .sampleData) {

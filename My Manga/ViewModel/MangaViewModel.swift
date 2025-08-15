@@ -27,6 +27,7 @@ final class MangaViewModel {
     var currentPage = 1
     private let perPage = 30
     var isLoading = false
+    private var loadingIDs: Set<Int> = []
     var hasMorePages = true
     
 //    var isAlertPresented = false
@@ -99,10 +100,16 @@ extension MangaViewModel {
     func fetchMangaIfNeeded(for id: Int) async {
         print("Fetching manga if needed for item ID:", id)
         
-        guard !isLoading && mangasDict[id] == nil else { return }
+//        guard !isLoading && mangasDict[id] == nil else { return }
+//        
+//        isLoading = true
+//        defer { isLoading = false }
         
-        isLoading = true
-        defer { isLoading = false }
+// Si ya se está cargando o ya está en caché, salir
+        guard !loadingIDs.contains(id), mangasDict[id] == nil else { return }
+        
+        loadingIDs.insert(id)
+        defer { loadingIDs.remove(id) }
         
         do {
             let manga = try await repository.getMangaDetail(manga: id)
