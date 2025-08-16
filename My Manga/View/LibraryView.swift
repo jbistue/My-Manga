@@ -50,17 +50,19 @@ struct LibraryView: View {
                 } description: {
                     Text(String(localized: "There is no Manga in the library."))
                 }
-// MARK: - Para pruebas: permite añadir unos 1.000 Manga a la colección para comprobar el tiempo de carga inicial
-//                .toolbar {
-//                    ToolbarItem(placement: .topBarLeading) {
-//                        Button {
-//                            addThousandItems()
-//                        } label: {
-//                            Image(systemName: "document.badge.plus")
-//                                .font(.callout)
-//                        }
-//                    }
-//                }
+                // MARK: - Para pruebas: permite añadir unos 1.000 Manga a la colección para comprobar el tiempo de carga inicial
+                //                .toolbar {
+                //                    ToolbarItem(placement: .topBarLeading) {
+                //                        Button {
+                //                            addThousandItems()
+                //                        } label: {
+                //                            Image(systemName: "document.badge.plus")
+                //                                .font(.callout)
+                //                        }
+                //                    }
+                //                }
+            } else if loadedItems.isEmpty {
+                ProgressView("Loading collections...")
             } else {
                 ScrollView {
                     LibraryFilterBar(libraryFilter: $libraryFilter)
@@ -119,30 +121,31 @@ struct LibraryView: View {
         }
         .task {
             if !mangasCollection.isEmpty && loadedItems.isEmpty {
-                await loadMangas(for: Array(mangasCollection), batchSize: 20)
+                await fetchDetailsOfAllLibraryItems(for: Array(mangasCollection), batchSize: 20)
                 lastCollectionCount = mangasCollection.count
             }
         }
-        .onChange(of: mangasCollection.count) { _, newCount in
-            if newCount > lastCollectionCount {
-                // Cargar solo los Manga que falten, en caso de haberse añadido nuevos desde Store
-                let loadedIds = Set(loadedItems.map { $0.0.id })
-                let newOnes = mangasCollection.filter { !loadedIds.contains($0.id) }
-                Task { await loadMangas(for: newOnes, batchSize: 20) }
-                lastCollectionCount = newCount
-            }
+        .onChange(of: mangasCollection) { _, newCollection in
+            let currentIds = Set(newCollection.map { $0.id })
+            loadedItems.removeAll { !currentIds.contains($0.0.id) }
+
+            let loadedIds = Set(loadedItems.map { $0.0.id })
+            let newOnes = newCollection.filter { !loadedIds.contains($0.id) }
+            Task { await fetchDetailsOfAllLibraryItems(for: newOnes, batchSize: 20) }
+
+            lastCollectionCount = newCollection.count
         }
     }
     
     @MainActor
-    private func loadSingleManga(id: Int) async -> Manga? {
+    private func fetchSingleManga(id: Int) async -> Manga? {
         if model.mangaBy(id: id) == nil {
             await model.fetchMangaIfNeeded(for: id)
         }
         return model.mangaBy(id: id)
     }
     
-    private func loadMangas(for items: [LibraryItemDB], batchSize: Int = 20) async {
+    private func fetchDetailsOfAllLibraryItems(for items: [LibraryItemDB], batchSize: Int = 20) async {
         // Evitar tares si no hay nada en la Biblioteca
         guard !items.isEmpty else { return }
 
@@ -157,7 +160,7 @@ struct LibraryView: View {
             await withTaskGroup(of: (Int, Manga?).self) { group in
                 for id in batch {
                     group.addTask {
-                        let manga = await loadSingleManga(id: id)
+                        let manga = await fetchSingleManga(id: id)
                         return (id, manga)
                     }
                 }
@@ -175,9 +178,6 @@ struct LibraryView: View {
             }
         }
     }
-
-//    private func fetchDetailsOfAllLibraryItems(batchSize: Int = 30) async {
-//    }
     
 //    private func addThousandItems() {
 //        for manga in model.mangas {

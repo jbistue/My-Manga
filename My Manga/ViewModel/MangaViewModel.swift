@@ -19,7 +19,6 @@ final class MangaViewModel {
     var themes = [String]()
     var authors = [Author]()
     
-//    var manga: Manga? = nil
     var mangas: [Manga] = []
     var mangaFilter = "list/mangas"
     var menuLabel = String(localized: "All")
@@ -27,10 +26,9 @@ final class MangaViewModel {
     var currentPage = 1
     private let perPage = 30
     var isLoading = false
-    private var loadingIDs: Set<Int> = []
     var hasMorePages = true
-    
-//    var isAlertPresented = false
+    private var loadingIDs: Set<Int> = []
+
     var errorMessage: String?
     
     init(repository: NetworkRepository = Repository()) {
@@ -81,31 +79,11 @@ extension MangaViewModel {
         }
     }
     
-//    func getMangaDetail(id: Int) async -> Manga? {
-//        do {
-//            let manga = try await repository.getMangaDetail(manga: id)
-//            return manga
-//        } catch {
-//            errorMessage = error.localizedDescription
-//            return nil
-//        }
-////        return manga
-//    }
-    
     func mangaBy(id: Int) -> Manga? {
-        print("Devolviendo Manga del diccionario, ID:", id, mangasDict[id]?.title ?? "No encontrado")
-        return mangasDict[id]
+        mangasDict[id]
     }
     
     func fetchMangaIfNeeded(for id: Int) async {
-        print("Fetching manga if needed for item ID:", id)
-        
-//        guard !isLoading && mangasDict[id] == nil else { return }
-//        
-//        isLoading = true
-//        defer { isLoading = false }
-        
-// Si ya se está cargando o ya está en caché, salir
         guard !loadingIDs.contains(id), mangasDict[id] == nil else { return }
         
         loadingIDs.insert(id)

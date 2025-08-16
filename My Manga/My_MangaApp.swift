@@ -34,19 +34,4 @@ struct My_MangaApp: App {
         }
         .modelContainer(sharedModelContainer)
     }
-    
-//    func loadData(_ container: ModelContainer) async {
-//        // let container = MangaContainer(modelContainer: container)
-//        let container = MangaContainer()
-//        mangaModel.container = container
-//        
-//        do {
-//            // mangaModel.state = .loading
-//            try await container.loadInitialData()
-//            // mangaModel.state = .loaded
-//        } catch {
-//            print("Error loading initial data: \(error)")
-//            // mangaModel.state = .error(error)
-//        }
-//    }
 }

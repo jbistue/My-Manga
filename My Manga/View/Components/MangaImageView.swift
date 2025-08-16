@@ -29,8 +29,7 @@ struct MangaImageView: View {
                 .clipShape(.circle)
                 .task {
                     guard let url else { return }
-                        
-                    print("MangaImageView task called", url)
+
                     imageModel.getImage(from: url)
                 }
         }

@@ -15,6 +15,9 @@ struct CollectionManagementView: View {
     @State private var libraryItem: LibraryItemDB? = nil
     @State private var selectedVolumesToAdd: Set<Int> = []
     @State private var itemSelectedToRead: Int? = nil
+    @State private var hasChangedVolumesToAdd = false
+    @State private var hasChangedVolumeToRead = false
+    @State private var showDeleteConfirmation = false
     
     let mangaItem: Manga
     
@@ -36,154 +39,168 @@ struct CollectionManagementView: View {
     
     var body: some View {
         ScrollView {
-            GroupBox {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text(mangaItem.title ?? "Unknown Manga")
-                        .font(.title)
-                        .foregroundColor(.primary)
-                        .bold()
-                        .padding(.vertical, 16)
-
-                    VStack(alignment: .leading, spacing: 10) {
-                        HStack {
-                            Text("**Select volumes to add:**")
-                                .font(.callout)
+            VStack(alignment: .leading, spacing: 16) {
+                Text(mangaItem.title ?? "Unknown Manga")
+                    .font(.title)
+                    .foregroundColor(.primary)
+                    .bold()
+                    .padding(.vertical, 16)
+                
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack(alignment: .bottom) {
+                        Text("**Select volumes to add:**")
+                            .font(.callout)
+                        
+                        if pendingVolumes.isEmpty {
+                            Text(String(localized: "All volumes owned"))
+                                .foregroundColor(.green)
+                        } else {
+                            Spacer()
                             
-                            if pendingVolumes.isEmpty {
-                                Text(String(localized: "All volumes owned"))
-                                    .foregroundColor(.green)
-                            } else {
-                                Spacer()
-                                
-                                Button(allSelected ? "Deselect All" : "Select All") {
-                                    withAnimation {
-                                        if allSelected {
-                                            selectedVolumesToAdd.removeAll()
-                                        } else {
-                                            selectedVolumesToAdd = Set(pendingVolumes)
-                                        }
-                                    }
-                                }
-            // TODO: este formato de botón se usa en tres sitios, quizás convendría crear un estilo de botón personalizado
-                                .buttonStyle(.bordered)
-                                .font(.subheadline)
-    //                            .font(.subheadline)
-    //                            .padding(6)
-    //                            .background(Color.accentColor.opacity(0.1))
-    //                            .foregroundColor(.accentColor)
-    //                            .cornerRadius(6)
-                            }
-                        }
-
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))], spacing: 10) {
-                            ForEach(pendingVolumes, id: \.self) { volume in
-                                Button(action: {
-                                    if selectedVolumesToAdd.contains(volume) {
-                                        selectedVolumesToAdd.remove(volume)
+                            Button(allSelected ? "Deselect All" : "Select All") {
+                                withAnimation {
+                                    if allSelected {
+                                        selectedVolumesToAdd.removeAll()
+                                        hasChangedVolumesToAdd = false
                                     } else {
-                                        selectedVolumesToAdd.insert(volume)
+                                        selectedVolumesToAdd = Set(pendingVolumes)
+                                        hasChangedVolumesToAdd = true
                                     }
-                                }) {
-                                    Text("\(volume)")
-                                        .font(.caption)
-                                        .frame(width: 35, height: 35)
-                                        .background(selectedVolumesToAdd.contains(volume) ? Color.accentColor : Color(.systemGray5))
-                                        .foregroundColor(selectedVolumesToAdd.contains(volume) ? .white : .primary)
-                                        .clipShape(Circle())
-                                        .overlay(
-                                            Circle().stroke(Color.accentColor, lineWidth: selectedVolumesToAdd.contains(volume) ? 0 : 1)
-                                        )
                                 }
-                                .animation(.easeInOut(duration: 0.2), value: selectedVolumesToAdd)
                             }
+                            .font(.subheadline)
                         }
                     }
                     
-                    if libraryItem != nil {
-                        HStack {
-                            Text("**Reading volume:**")
-                                .font(.callout)
-                            
-                            Picker("Reading volume:", selection: $itemSelectedToRead) {
-                                Text("-").tag(Optional<Int>.none)
-                                if let mangasInLibrary = libraryItem{
-                                    ForEach(mangasInLibrary.volumesOwned.sorted(by: <), id: \.self) { item in
-                                        Text(String(item))
-                                            .tag(item)
-                                            .font(.callout)
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))], spacing: 10) {
+                        ForEach(pendingVolumes, id: \.self) { volume in
+                            Button(action: {
+                                if selectedVolumesToAdd.contains(volume) {
+                                    selectedVolumesToAdd.remove(volume)
+                                    if selectedVolumesToAdd.isEmpty {
+                                        hasChangedVolumesToAdd = false
                                     }
+                                } else {
+                                    selectedVolumesToAdd.insert(volume)
+                                    hasChangedVolumesToAdd = true
                                 }
+                            }) {
+                                Text("\(volume)")
+                                    .font(.caption)
+                                    .frame(width: 35, height: 35)
+                                    .background(selectedVolumesToAdd.contains(volume) ? Color.accentColor : Color(.systemGray5))
+                                    .foregroundColor(selectedVolumesToAdd.contains(volume) ? .white : .primary)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle().stroke(Color.accentColor, lineWidth: selectedVolumesToAdd.contains(volume) ? 0 : 1)
+                                    )
                             }
-                            .pickerStyle(.wheel)
-                            .frame(width: 80)
-                            
-                            Button("Next") {
-                                withAnimation {
-                                    guard let current = itemSelectedToRead,
-                                          let index = libraryItem?.volumesOwned.firstIndex(of: current),
-                                          ((libraryItem?.volumesOwned.indices.contains(index + 1)) != nil)
-                                    else {
-                                        itemSelectedToRead = libraryItem?.volumesOwned.first
-                                        return
-                                    }
-                                    itemSelectedToRead = libraryItem?.volumesOwned[index + 1]
-                                }
-                            }
-                            .buttonStyle(.bordered)
-                            .font(.subheadline)
-    //                        .padding(6)
-    //                        .background(Color.accentColor.opacity(0.1))
-    //                        .foregroundColor(.accentColor)
-    //                        .cornerRadius(6)
-
-                            Button("None") {
-                                withAnimation {
-                                    itemSelectedToRead = nil
-                                }
-                            }
-                            .font(.subheadline)
-                            .padding(6)
-                            .background(Color.accentColor.opacity(0.1))
-                            .foregroundColor(.accentColor)
-                            .cornerRadius(6)
+                            .animation(.easeInOut(duration: 0.2), value: selectedVolumesToAdd)
                         }
-                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
+                }
+                
+                if libraryItem != nil {
+                    let initialReadingVolume = libraryItem?.readingVolume ?? nil
                     
                     HStack {
-    //                    Button("Cancel", role: .cancel) {
-    //                        dismiss()
-    //                    }
-    //                    .buttonStyle(.bordered)
+                        Text("**Reading volume:**")
+                            .font(.callout)
                         
-                        Button("Save") {
-                            updateLibrary()
+                        Picker("Reading volume:", selection: $itemSelectedToRead) {
+                            Text("-").tag(Optional<Int>.none)
+                            if let mangasInLibrary = libraryItem{
+                                ForEach(mangasInLibrary.volumesOwned.sorted(by: <), id: \.self) { item in
+                                    Text(String(item))
+                                        .tag(item)
+                                        .font(.callout)
+                                }
+                            }
+                        }
+                        .pickerStyle(.wheel)
+                        .frame(width: 80)
+                        .onChange(of: itemSelectedToRead) { _, newValue in
+                            hasChangedVolumeToRead = newValue != initialReadingVolume
+                        }
+                        
+                        Button("Next") {
+                            withAnimation {
+                                guard
+                                    let volumes = libraryItem?.volumesOwned.sorted()
+                                else { return }
+                                
+                                if let current = itemSelectedToRead,
+                                   let index = volumes.firstIndex(of: current),
+                                   index < volumes.count - 1 {
+                                    itemSelectedToRead = volumes[index + 1]
+                                } else {
+                                    itemSelectedToRead = volumes.first
+                                }
+                            }
+                        }
+                        .font(.subheadline)
+                        .disabled({
+                            guard
+                                let volumes = libraryItem?.volumesOwned.sorted()
+                            else { return true }
+                            
+                            if let current = itemSelectedToRead,
+                               let index = volumes.firstIndex(of: current) {
+                                return index == volumes.count - 1 // último -> desactivar
+                            }
+                            return false
+                        }())
+                        
+                        Button("None") {
+                            withAnimation {
+                                itemSelectedToRead = nil
+                            }
+                        }
+                        .font(.subheadline)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                
+                HStack {
+                    Button("Remove from Library", role: .destructive) {
+                        showDeleteConfirmation = true
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(libraryItem == nil)
+                    
+                    Button("Done") {
+                        updateLibrary()
+                        dismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!hasChangedVolumesToAdd && !hasChangedVolumeToRead)
+                    .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
+                        Button("Delete", role: .destructive) {
+                            guard let itemToDelete = libraryItem else { return }
+                            modelContext.delete(itemToDelete)
+                            do {
+                                try modelContext.save()
+                            } catch {
+                                print("Error deleting manga: \(error.localizedDescription)")
+                            }
                             dismiss()
                         }
-                        .buttonStyle(.borderedProminent)
+                        Button("Cancel", role: .cancel) { }
+                    } message: {
+                        Text("This Manga will be permanently removed from your library.")
                     }
-                    .frame(maxWidth: .infinity, alignment: .center)
                 }
+                .frame(maxWidth: .infinity, alignment: .center)
             }
-            
-            // TODO: eliminar este texto, está solo a efecto de pruebas y comprobaciones
-//            Text("Id item biblioteca: \(libraryItem?.id ?? 0)")
-//            Text("Id manga a buscar: \(mangaItem.id)")
-//            
-//            if libraryItem != nil {
-//                Text("Reading volume: \(libraryItem?.readingVolume.map { "\($0)" } ?? "-")")
-//                Text("Selected: \(itemSelectedToRead ?? 0)")
-//            }
+            .padding()
         }
         .scrollIndicators(.hidden)
         .onAppear {
-            print("Library Item ID (al cargar):", libraryItem?.id ?? "No Library Item")
             loadItem()
         }
     }
     
     private func loadItem() {
-        print("Loading item with ID (función): \(mangaItem.id)")
         let descriptor = FetchDescriptor<LibraryItemDB>(
             predicate: #Predicate { $0.id == mangaItem.id }
         )
@@ -192,7 +209,6 @@ struct CollectionManagementView: View {
             let results = try modelContext.fetch(descriptor)
             libraryItem = results.first
             itemSelectedToRead = libraryItem?.readingVolume
-            print("Library item: \(libraryItem?.id ?? 0)")
         } catch {
             print("Database search error: \(error)")
         }
@@ -231,19 +247,6 @@ struct CollectionManagementView: View {
     CollectionManagementView(
         mangaItem: .testInLibrary)
 }
-
-//#Preview("En Librería, sin info API") {
-//    @Previewable @State var imageModel = AsyncImageViewModel()
-//    
-//    CollectionManagementView(
-//        mangaItem: nil,
-//        libraryItem: LibraryItemDB(
-//            id: 42,
-//            completeCollection: false,
-//            volumesOwned: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
-//            readingVolume: 4))
-//    .environment(imageModel)
-//}
 
 #Preview("No en Biblioteca") {
     CollectionManagementView(

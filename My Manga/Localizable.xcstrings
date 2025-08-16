@@ -2,7 +2,7 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
     "-" : {
       "localizations" : {
@@ -349,6 +349,16 @@
         }
       }
     },
+    "Are you sure?" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Está seguro?"
+          }
+        }
+      }
+    },
     "Authors" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -356,6 +366,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Autores"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancelar"
           }
         }
       }
@@ -388,6 +408,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Publicando actualmente"
+          }
+        }
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eliminar"
           }
         }
       }
@@ -436,6 +466,16 @@
     },
     "Detalle del ítem %lld" : {
       "shouldTranslate" : false
+    },
+    "Done" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hecho"
+          }
+        }
+      }
     },
     "Finished" : {
       "extractionState" : "manual",
@@ -552,6 +592,16 @@
         }
       }
     },
+    "Loading collections..." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cargando colecciones ..."
+          }
+        }
+      }
+    },
     "Manga data not available" : {
       "localizations" : {
         "es" : {
@@ -623,6 +673,16 @@
         }
       }
     },
+    "Pending: %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pendientes: %@"
+          }
+        }
+      }
+    },
     "Pollos" : {
       "shouldTranslate" : false
     },
@@ -656,8 +716,15 @@
         }
       }
     },
-    "Save" : {
-
+    "Remove from Library" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar de la Biblioteca"
+          }
+        }
+      }
     },
     "Search" : {
       "extractionState" : "manual",
@@ -775,6 +842,16 @@
         }
       }
     },
+    "This Manga will be permanently removed from your library." : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Este Manga será eliminado permanentemente de tu biblioteca."
+          }
+        }
+      }
+    },
     "Unknown" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -795,9 +872,6 @@
           }
         }
       }
-    },
-    "VOLUMENES PENDIENTES: %@" : {
-
     }
   },
   "version" : "1.0"
