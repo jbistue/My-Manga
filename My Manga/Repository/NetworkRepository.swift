@@ -13,7 +13,8 @@ protocol NetworkRepository: NetworkInteractor, Sendable {
     func getDemographics() async throws(NetworkError) -> [String]
     func getGenres() async throws(NetworkError) -> [String]
     func getThemes() async throws(NetworkError) -> [String]
-    func getAuthors() async throws(NetworkError) -> [Author]
+// MARK: en esta versión no se implementa authors
+//    func getAuthors() async throws(NetworkError) -> [Author]
     func getMangasBy(filter: String, page: Int, per: Int) async throws(NetworkError) -> [Manga]
     func getMangaDetail(manga: Int) async throws(NetworkError) -> Manga
 }
@@ -32,10 +33,11 @@ extension NetworkRepository {
     func getThemes() async throws(NetworkError) -> [String] {
         try await getJSON(.get(url: .themes, token: token), type: [String].self)
     }
-
-    func getAuthors() async throws(NetworkError) -> [Author] {
-        try await getJSON(.get(url: .authors, token: token), type: [Author].self)
-    }
+    
+// MARK: en esta versión no se implementa authors
+//    func getAuthors() async throws(NetworkError) -> [Author] {
+//        try await getJSON(.get(url: .authors, token: token), type: [Author].self)
+//    }
    
     func getMangasBy(filter: String, page: Int, per: Int) async throws(NetworkError) -> [Manga] {
         try await getJSON(.get(url: .filterOrSearchMangas(by: filter, page: page, per: per), token: token), type: Mangas.self).items

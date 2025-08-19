@@ -1,5 +1,5 @@
 //
-//  LibraryItemCellView.swift
+//  LibraryRow.swift
 //  My Manga
 //
 //  Created by Javier Bistue on 16/7/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct LibraryItemCellView: View {
+struct LibraryRow: View {
     @State private var isFormPresented: Bool = false
     
     let libraryItem: LibraryItemDB
@@ -16,7 +16,10 @@ struct LibraryItemCellView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
             MangaImageView(url: mangaItem?.mainPicture)
-                .frame(maxWidth: 70, minHeight: 50, maxHeight: 100, alignment: .center)
+                .cornerRadius(10)
+//                .frame(maxWidth: 60, minHeight: 50, maxHeight: 90, alignment: .center)
+                .frame(maxWidth: 60, maxHeight: 90, alignment: .center)
+                .shadow(color: .black.opacity(0.5), radius: 5, x: 0, y: 5)
             
             VStack(alignment: .leading) {
                 HStack {
@@ -67,14 +70,14 @@ struct LibraryItemCellView: View {
         .cornerRadius(10)
         .sheet(isPresented: $isFormPresented) {
             if let manga = mangaItem {
-                CollectionManagementView(mangaItem: manga)
+                LibraryManagementView(mangaItem: manga)
             }
         }
     }
 }
 
 #Preview("Info del Maga disponible de la API") {
-    LibraryItemCellView(
+    LibraryRow(
         libraryItem: LibraryItemDB(
             id: 42,
             completeCollection: false,
@@ -84,7 +87,7 @@ struct LibraryItemCellView: View {
 }
 
 #Preview("Info del Maga NO disponible ...") {
-    LibraryItemCellView(
+    LibraryRow(
         libraryItem: LibraryItemDB(
             id: 42,
             completeCollection: false,

@@ -15,8 +15,9 @@ extension URL {
     static let genres = apiURL.appending(path: "list/genres")
     
     static let demographics = apiURL.appending(path: "list/demographics")
-    
-    static let authors = apiURL.appending(path: "list/authors")
+
+// MARK: en esta versión no se implementa authors
+//    static let authors = apiURL.appending(path: "list/authors")
     
     static func manga(id: Int) -> URL {
         apiURL.appending(path: "search/manga/\(id)")

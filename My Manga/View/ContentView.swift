@@ -28,7 +28,6 @@ struct ContentView: View {
 }
 
 #Preview(traits: .sampleData) {
-//#Preview {
     @Previewable @State var model = MangaViewModel()
     @Previewable @State var imageModel = AsyncImageViewModel()
     

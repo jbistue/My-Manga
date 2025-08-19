@@ -50,17 +50,17 @@ struct LibraryView: View {
                 } description: {
                     Text(String(localized: "There is no Manga in the library."))
                 }
-                // MARK: - Para pruebas: permite añadir unos 1.000 Manga a la colección para comprobar el tiempo de carga inicial
-                //                .toolbar {
-                //                    ToolbarItem(placement: .topBarLeading) {
-                //                        Button {
-                //                            addThousandItems()
-                //                        } label: {
-                //                            Image(systemName: "document.badge.plus")
-                //                                .font(.callout)
-                //                        }
-                //                    }
-                //                }
+// MARK: - Para pruebas: permite añadir unos 1.000 Manga a la colección para comprobar el tiempo de carga inicial
+//                .toolbar {
+//                    ToolbarItem(placement: .topBarLeading) {
+//                        Button {
+//                            addThousandItems()
+//                        } label: {
+//                            Image(systemName: "document.badge.plus")
+//                                .font(.callout)
+//                        }
+//                    }
+//                }
             } else if loadedItems.isEmpty {
                 ProgressView("Loading collections...")
             } else {
@@ -73,12 +73,12 @@ struct LibraryView: View {
                                 Button {
                                     selectedItem = item
                                 } label: {
-                                    LibraryItemCellView(libraryItem: item, mangaItem: manga)
+                                    LibraryRow(libraryItem: item, mangaItem: manga)
                                 }
                                 .buttonStyle(.plain)
                             } else {
                                 NavigationLink(value: item) {
-                                    LibraryItemCellView(libraryItem: item, mangaItem: manga)
+                                    LibraryRow(libraryItem: item, mangaItem: manga)
                                 }
                             }
                         }
@@ -93,35 +93,34 @@ struct LibraryView: View {
                 .onChange(of: libraryFilter) { _, _ in selectedItem = nil }
                 .onChange(of: searchText) { _, _ in selectedItem = nil }
                 .navigationDestination(for: LibraryItemDB.self) { item in
-                    ItemDBDetailView(
+                    LibraryDetailView(
                         libraryItem: item,
                         mangaItem: model.mangaBy(id: item.id)
                     )
                 }
 // MARK: - Para pruebas: permite eliminar todos los Manga de la colección
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(role: .destructive) {
-                            deleteAllItems()
-//                            deleteItems(offsets: mangasCollection.indices)
-                        } label: {
-                            Image(systemName: "trash")
-                                .font(.callout)
-                                .foregroundColor(.red)
-                        }
-                    }
-                }
+//                .toolbar {
+//                    ToolbarItem(placement: .topBarTrailing) {
+//                        Button(role: .destructive) {
+//                            deleteAllItems()
+//                        } label: {
+//                            Image(systemName: "trash")
+//                                .font(.callout)
+//                                .foregroundColor(.red)
+//                        }
+//                    }
+//                }
             }
         } detail: {
             if let selected = selectedItem {
-                ItemDBDetailView(libraryItem: selected, mangaItem: model.mangaBy(id: selected.id))
+                LibraryDetailView(libraryItem: selected, mangaItem: model.mangaBy(id: selected.id))
             } else {
                 Text("Select an item")
             }
         }
         .task {
             if !mangasCollection.isEmpty && loadedItems.isEmpty {
-                await fetchDetailsOfAllLibraryItems(for: Array(mangasCollection), batchSize: 20)
+                await fetchDetailsOfAllLibraryItems(for: Array(mangasCollection), batchSize: 10)
                 lastCollectionCount = mangasCollection.count
             }
         }
@@ -131,13 +130,15 @@ struct LibraryView: View {
 
             let loadedIds = Set(loadedItems.map { $0.0.id })
             let newOnes = newCollection.filter { !loadedIds.contains($0.id) }
-            Task { await fetchDetailsOfAllLibraryItems(for: newOnes, batchSize: 20) }
+            Task {
+                await fetchDetailsOfAllLibraryItems(for: newOnes, batchSize: 10)
+            }
 
             lastCollectionCount = newCollection.count
         }
     }
     
-    @MainActor
+//    @MainActor
     private func fetchSingleManga(id: Int) async -> Manga? {
         if model.mangaBy(id: id) == nil {
             await model.fetchMangaIfNeeded(for: id)
@@ -145,7 +146,7 @@ struct LibraryView: View {
         return model.mangaBy(id: id)
     }
     
-    private func fetchDetailsOfAllLibraryItems(for items: [LibraryItemDB], batchSize: Int = 20) async {
+    private func fetchDetailsOfAllLibraryItems(for items: [LibraryItemDB], batchSize: Int = 10) async {
         // Evitar tares si no hay nada en la Biblioteca
         guard !items.isEmpty else { return }
 
@@ -179,6 +180,7 @@ struct LibraryView: View {
         }
     }
     
+// MARK: - Funciones para pruebas (añadir unos 1.000 Mangas y eliminar todos los Manga de la colección)
 //    private func addThousandItems() {
 //        for manga in model.mangas {
 //            for i in 0..<1000 {
@@ -193,17 +195,14 @@ struct LibraryView: View {
 //            }
 //        }
 //    }
-    
-    private func deleteAllItems() {
-        withAnimation {
-            for item in mangasCollection {
-                modelContext.delete(item)
-            }
-//            for index in offsets {
-//                modelContext.delete(mangasCollection[index])
+//    
+//    private func deleteAllItems() {
+//        withAnimation {
+//            for item in mangasCollection {
+//                modelContext.delete(item)
 //            }
-        }
-    }
+//        }
+//    }
 }
 
 #Preview("Librería con Manga", traits: .sampleData) {

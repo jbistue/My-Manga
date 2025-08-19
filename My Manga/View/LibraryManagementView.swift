@@ -1,5 +1,5 @@
 //
-//  CollectionManagementView.swift
+//  LibraryManagementView.swift
 //  My Manga
 //
 //  Created by Javier Bistue on 30/7/25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct CollectionManagementView: View {
+struct LibraryManagementView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
     
@@ -50,13 +50,14 @@ struct CollectionManagementView: View {
                     HStack(alignment: .bottom) {
                         Text("**Select volumes to add:**")
                             .font(.callout)
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.leading)
                         
                         if pendingVolumes.isEmpty {
                             Text(String(localized: "All volumes owned"))
                                 .foregroundColor(.green)
+                                .multilineTextAlignment(.trailing)
                         } else {
-                            Spacer()
-                            
                             Button(allSelected ? "Deselect All" : "Select All") {
                                 withAnimation {
                                     if allSelected {
@@ -106,6 +107,8 @@ struct CollectionManagementView: View {
                     HStack {
                         Text("**Reading volume:**")
                             .font(.callout)
+                            .foregroundColor(.primary)
+                            .multilineTextAlignment(.leading)
                         
                         Picker("Reading volume:", selection: $itemSelectedToRead) {
                             Text("-").tag(Optional<Int>.none)
@@ -220,7 +223,6 @@ struct CollectionManagementView: View {
         let updatedReadingVolume = itemSelectedToRead
         
         if let existingItem = libraryItem {
-            print("Updating existing library item with ID: \(existingItem.id)")
             existingItem.volumesOwned = updatedVolumesOwned
             existingItem.completeCollection = updatedCompleteCollection
             existingItem.readingVolume = updatedReadingVolume
@@ -231,7 +233,6 @@ struct CollectionManagementView: View {
                 print("Error saving item: \(error)")
             }
         } else {
-            print("Creating new library item for manga with ID: \(mangaItem.id)")
             let newItem = LibraryItemDB(
                 id: mangaItem.id,
                 completeCollection: updatedCompleteCollection,
@@ -244,11 +245,11 @@ struct CollectionManagementView: View {
 }
 
 #Preview("En Biblioteca, con info API", traits: .sampleData) {
-    CollectionManagementView(
+    LibraryManagementView(
         mangaItem: .testInLibrary)
 }
 
 #Preview("No en Biblioteca") {
-    CollectionManagementView(
+    LibraryManagementView(
         mangaItem: .test)
 }

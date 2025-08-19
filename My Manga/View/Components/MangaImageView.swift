@@ -12,28 +12,38 @@ struct MangaImageView: View {
 
     let url: URL?
     
+//    private var placeholder: UIImage {
+//        let original = UIImage(named: "no_manga_image")!
+//        let targetWidth: CGFloat = 512
+//        let scale = original.size.width / targetWidth
+//        let height = max(1, original.size.height / scale)
+//        
+//        return UIGraphicsImageRenderer(size: .init(width: targetWidth, height: height))
+//            .image { _ in
+//                original.draw(in: CGRect(origin: .zero, size: .init(width: targetWidth, height: height)))
+//            }
+//    }
+    
     var body: some View {
-        if let image = imageModel.image {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFit()
-                .cornerRadius(10)
-                .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
-        } else {
-            Image(systemName: "photo")
-                .resizable()
-                .scaledToFit()
-                .padding(100)
-                .foregroundStyle(.primary)
-                .background(Color.gray.opacity(0.2))
-                .clipShape(.circle)
-                .task {
-                    guard let url else { return }
-
-                    imageModel.getImage(from: url)
-                }
+        Group {
+            if let image = imageModel.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+//                Image(uiImage: placeholder)
+                Image("no_manga_image")
+                    .resizable()
+                    .scaledToFit()
+                    .task {
+                        guard let url else { return }
+                        
+                        imageModel.getImage(from: url)
+                    }
+            }
         }
     }
+            
 }
 
 #Preview("Con imagen") {

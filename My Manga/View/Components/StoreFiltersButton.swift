@@ -1,5 +1,5 @@
 //
-//  MangaFiltersButton.swift
+//  StoreFiltersButton.swift
 //  My Manga
 //
 //  Created by Javier Bistue on 21/7/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MangaFiltersButton: ViewModifier {
+struct StoreFiltersButton: ViewModifier {
     @Environment(MangaViewModel.self) var model
 
     func body(content: Content) -> some View {
@@ -54,7 +54,7 @@ struct MangaFiltersButton: ViewModifier {
 
 extension View {
     func mangaFiltersButton() -> some View {
-        modifier(MangaFiltersButton())
+        modifier(StoreFiltersButton())
     }
 }
 

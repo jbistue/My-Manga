@@ -26,12 +26,12 @@ struct StoreView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 150))]) {
                     ForEach(model.mangas) { manga in
                         NavigationLink(value: manga) {
-                            CoverView(manga: manga, namespace: namespace)
+                            MangaCoverView(manga: manga, namespace: namespace)
                                 .cornerRadius(10)
                                 .onAppear {
                                     if let index = model.mangas.firstIndex(where: { $0.id == manga.id }),
-                                        // faltan 8 para el final
-                                        index == model.mangas.count - 8 {
+                                        // faltan 4/6/8/... para el final
+                                        index == model.mangas.count - 4 {
                                         Task {
                                             await model.fetchFilteredMangas()
                                         }
@@ -65,7 +65,7 @@ struct StoreView: View {
             }
             .mangaFiltersButton()
             .navigationDestination(for: Manga.self) { manga in
-                MangaDetailView(manga: manga)
+                StoreDetailView(manga: manga)
                     .navigationTransition(.zoom(sourceID: "cover_\(manga.id)", in: namespace))
             }
             .refreshable {
@@ -100,7 +100,6 @@ struct StoreView: View {
         }
         .task {
             if model.mangas.isEmpty {
-                print("Fetching initial mangas...")
                 await model.fetchFilteredMangas()
             }
         }

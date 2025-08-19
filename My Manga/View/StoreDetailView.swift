@@ -1,5 +1,5 @@
 //
-//  MangaDetailView.swift
+//  StoreDetailView.swift
 //  My Manga
 //
 //  Created by Javier Bistue on 25/6/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MangaDetailView: View {
+struct StoreDetailView: View {
     @State private var isFormPresented: Bool = false
     @State private var presentedLibraryItem: LibraryItemDB?
     
@@ -17,11 +17,10 @@ struct MangaDetailView: View {
         ScrollView {
             VStack(alignment: .leading) {
                 MangaImageView(url: manga.mainPicture)
-                    .scaledToFit()
                     .cornerRadius(10)
                     .frame(minHeight: 150, maxHeight: 400, alignment: .center)
                     .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, 32)
 
                 mangaDetails
             }
@@ -39,7 +38,7 @@ struct MangaDetailView: View {
                 }
             }
             .sheet(isPresented: $isFormPresented) {
-                CollectionManagementView(mangaItem: manga)
+                LibraryManagementView(mangaItem: manga)
             }
         }
     }
@@ -81,5 +80,5 @@ struct MangaDetailView: View {
 }
 
 #Preview {
-    MangaDetailView(manga: .test)
+    StoreDetailView(manga: .test)
 }

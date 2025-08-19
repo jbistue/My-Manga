@@ -1,0 +1,15 @@
+NOTAS A LA PRÁCTICA FINAL DEL SDP '25
+
+
+He optado por presentar la Versión Básica.
+
+Asimismo, he decidido utilizar concurrencia estricta, y obviar las actualizaciones beta recientemente presentadas por Apple. 
+
+La App parte de dos vistas (Tabs), una en la que se gestiona la Biblioteca del usuario, y otra a modo de Tienda, desde la que se accede a los Manga de la API, y que permite “comprar” o descargar los títulos a la Biblioteca personal, que se almacenan con persistencia local.
+
+Para la vista de Biblioteca utilizo un NavigationSplitView, que permita ver tres paneles simultáneamente en dispositivos con pantalla suficientemente grande. Esta vista, así como la de detalle de los Manga de la Biblioteca, combina los datos almacenados localmente con otros que se descargan de la API al construir la vista. Por esto la carga inicial de los Manga de la biblioteca se hace por lotes, para evitar que si hay mucha colecciones la pantalla se quede bloqueada hasta que estén todas cargadas. Se puede hacer búsquedas por título, y filtrar por colecciones completas, incompletas, y las que se están leyendo.
+
+Para la vista de Tienda utilizo un LazyVGrid, en el que el número de columnas se adapta al tamaño de pantalla, y muestra para cada Manga su imagen y su título. Se puede hacer búsquedas por título, y filtrar por Demografías, Géneros y Temas.  Al seleccionar un Manga se accede a la vista de detalle con toda la información proporcionada por la API, y desde la que se puede descargar a la Biblioteca del usuario.
+
+Javier Bistué
+19 de agosto de 2025

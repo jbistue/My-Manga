@@ -40,16 +40,6 @@
         }
       }
     },
-    "(%lld)" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "(%lld)"
-          }
-        }
-      }
-    },
     "(%lld/%@)" : {
       "localizations" : {
         "en" : {
@@ -157,26 +147,6 @@
         }
       }
     },
-    "**Owned volumes:** %@" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "**Volúmenes descargados:**"
-          }
-        }
-      }
-    },
-    "**Pending volumes:** %@" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "**Volúmenes pendientes:**"
-          }
-        }
-      }
-    },
     "**Reading volume:**" : {
       "localizations" : {
         "es" : {
@@ -259,32 +229,12 @@
         }
       }
     },
-    "**Title:** %@" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "**Título:** %@"
-          }
-        }
-      }
-    },
     "**Volumes:** %@" : {
       "localizations" : {
         "es" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "**Volúmenes:** %@"
-          }
-        }
-      }
-    },
-    "# %lld" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "# %lld"
           }
         }
       }
@@ -299,22 +249,6 @@
         }
       }
     },
-    "%@, %@ *(%@)*" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@, %2$@ *(%3$@)*"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@, %2$@ *(%3$@)*"
-          }
-        }
-      }
-    },
     "%lld" : {
       "localizations" : {
         "es" : {
@@ -324,9 +258,6 @@
           }
         }
       }
-    },
-    "Add Item" : {
-      "shouldTranslate" : false
     },
     "All" : {
       "extractionState" : "manual",
@@ -354,7 +285,7 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "¿Está seguro?"
+            "value" : "¿Estás seguro?"
           }
         }
       }
@@ -454,19 +385,6 @@
         }
       }
     },
-    "Detail" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detalle"
-          }
-        }
-      }
-    },
-    "Detalle del ítem %lld" : {
-      "shouldTranslate" : false
-    },
     "Done" : {
       "localizations" : {
         "es" : {
@@ -561,16 +479,6 @@
         }
       }
     },
-    "Item %lld" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Item %lld"
-          }
-        }
-      }
-    },
     "JSON error: %@" : {
       "localizations" : {
         "es" : {
@@ -618,16 +526,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Datos del Manga no disponibles."
-          }
-        }
-      }
-    },
-    "Mangas" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mangas"
           }
         }
       }
@@ -682,9 +580,6 @@
           }
         }
       }
-    },
-    "Pollos" : {
-      "shouldTranslate" : false
     },
     "Reading" : {
       "localizations" : {
@@ -763,26 +658,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seleccionar un elemento"
-          }
-        }
-      }
-    },
-    "Select volumes to add:" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seleccionar volúmenes para añadir:"
-          }
-        }
-      }
-    },
-    "Selected: %lld" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seleccionado:"
           }
         }
       }

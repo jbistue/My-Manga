@@ -1,5 +1,5 @@
 //
-//  CoverView.swift
+//  MangaCoverView.swift
 //  My Manga
 //
 //  Created by Javier Bistue on 9/7/25.
@@ -7,16 +7,12 @@
 
 import SwiftUI
 
-struct CoverView: View {
+struct MangaCoverView: View {
     let manga: Manga
     let namespace: Namespace.ID
     
     var body: some View {
         MangaImageView(url: manga.mainPicture)
-//            .resizable()
-//            .scaledToFit()
-//            .cornerRadius(10)
-//            .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
             .matchedTransitionSource(id: "cover_\(manga.id)", in: namespace)
             .overlay(alignment: .bottom) {
                 title
@@ -41,5 +37,5 @@ struct CoverView: View {
 #Preview {
     @Previewable @Namespace var namespace
     
-    CoverView(manga: .test, namespace: namespace)
+    MangaCoverView(manga: .test, namespace: namespace)
 }

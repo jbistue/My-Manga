@@ -17,14 +17,16 @@ final class MangaViewModel {
     var demographics = [String]()
     var genres = [String]()
     var themes = [String]()
-    var authors = [Author]()
+// MARK: en esta versión no se implementa authors
+//    var authors = [Author]()
     
     var mangas: [Manga] = []
     var mangaFilter = "list/mangas"
     var menuLabel = String(localized: "All")
     
     var currentPage = 1
-    private let perPage = 30
+    private let perPage = 10
+//    private let perPage = 30
     var isLoading = false
     var hasMorePages = true
     private var loadingIDs: Set<Int> = []
@@ -41,12 +43,12 @@ final class MangaViewModel {
                 async let demographics = loader.getDemographics()
                 async let genres = loader.getGenres()
                 async let themes = loader.getThemes()
-                async let authors = loader.getAuthors()
+//                async let authors = loader.getAuthors()
 
                 self.demographics = try await demographics
                 self.genres = try await genres
                 self.themes = try await themes
-                self.authors = try await authors
+//                self.authors = try await authors
             } catch {
                 errorMessage = error.localizedDescription
             }

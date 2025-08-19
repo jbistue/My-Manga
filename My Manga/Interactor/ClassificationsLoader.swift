@@ -25,8 +25,9 @@ actor ClassificationsLoader {
         return themes.sorted(by: <)
     }
     
-    func getAuthors() async throws -> [Author] {
-        let authors = try await repository.getAuthors()
-        return authors.sorted(by: { $0.lastName < $1.lastName })
-    }
+// MARK: en esta versión no se implementa authors
+//    func getAuthors() async throws -> [Author] {
+//        let authors = try await repository.getAuthors()
+//        return authors.sorted(by: { $0.lastName < $1.lastName })
+//    }
 }

@@ -1,5 +1,5 @@
 //
-//  ItemDBDetailView.swift
+//  LibraryDetailView.swift
 //  My Manga
 //
 //  Created by Javier Bistue on 7/8/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ItemDBDetailView: View {
+struct LibraryDetailView: View {
     @State private var isFormPresented: Bool = false
     
     let libraryItem: LibraryItemDB
@@ -30,7 +30,6 @@ struct ItemDBDetailView: View {
             ScrollView {
                 MangaImageView(url: mangaItem?.mainPicture)
                     .id(mangaItem?.mainPicture)
-                    .scaledToFit()
                     .cornerRadius(10)
                     .frame(minHeight: 150, maxHeight: 400, alignment: .center)
                     .shadow(color: .black.opacity(0.5), radius: 10, x: 0, y: 10)
@@ -124,7 +123,7 @@ struct ItemDBDetailView: View {
                     }
                 }
                 .sheet(isPresented: $isFormPresented) {
-                    CollectionManagementView(mangaItem: mangaItem!)
+                    LibraryManagementView(mangaItem: mangaItem!)
                 }
             }
             .scrollIndicators(.hidden)
@@ -139,7 +138,7 @@ struct ItemDBDetailView: View {
 }
 
 #Preview {
-    ItemDBDetailView(
+    LibraryDetailView(
         libraryItem: LibraryItemDB(
             id: 42,
             completeCollection: false,
@@ -149,7 +148,7 @@ struct ItemDBDetailView: View {
 }
 
 #Preview {
-    ItemDBDetailView(
+    LibraryDetailView(
         libraryItem: LibraryItemDB(
             id: 42,
             completeCollection: false,
