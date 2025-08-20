@@ -13,8 +13,6 @@ struct LibraryDetailView: View {
     let libraryItem: LibraryItemDB
     let mangaItem: Manga?
     
-    private let screenHeight = UIScreen.main.bounds.height
-        
     private var pendingVolumes: [Int] {
         guard let volumes = mangaItem?.volumes else { return [] }
         

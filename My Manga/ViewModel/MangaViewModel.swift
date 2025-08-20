@@ -25,8 +25,7 @@ final class MangaViewModel {
     var menuLabel = String(localized: "All")
     
     var currentPage = 1
-    private let perPage = 10
-//    private let perPage = 30
+    private let perPage = 20
     var isLoading = false
     var hasMorePages = true
     private var loadingIDs: Set<Int> = []
@@ -62,6 +61,7 @@ extension MangaViewModel {
         guard !isLoading, hasMorePages else { return }
 
         isLoading = true
+        errorMessage = nil
         defer { isLoading = false }
             
         do {
@@ -77,7 +77,7 @@ extension MangaViewModel {
                 currentPage += 1
             }
         } catch {
-                errorMessage = error.localizedDescription
+            errorMessage = error.localizedDescription
         }
     }
     

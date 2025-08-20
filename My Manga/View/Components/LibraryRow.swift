@@ -17,7 +17,6 @@ struct LibraryRow: View {
         HStack(alignment: .top, spacing: 10) {
             MangaImageView(url: mangaItem?.mainPicture)
                 .cornerRadius(10)
-//                .frame(maxWidth: 60, minHeight: 50, maxHeight: 90, alignment: .center)
                 .frame(maxWidth: 60, maxHeight: 90, alignment: .center)
                 .shadow(color: .black.opacity(0.5), radius: 5, x: 0, y: 5)
             

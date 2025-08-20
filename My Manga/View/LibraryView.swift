@@ -45,25 +45,19 @@ struct LibraryView: View {
     var body: some View {
         NavigationSplitView {
             if mangasCollection.isEmpty {
+                
                 ContentUnavailableView {
                     Image(systemName: "bookmark.slash")
                 } description: {
                     Text(String(localized: "There is no Manga in the library."))
                 }
-// MARK: - Para pruebas: permite añadir unos 1.000 Manga a la colección para comprobar el tiempo de carga inicial
-//                .toolbar {
-//                    ToolbarItem(placement: .topBarLeading) {
-//                        Button {
-//                            addThousandItems()
-//                        } label: {
-//                            Image(systemName: "document.badge.plus")
-//                                .font(.callout)
-//                        }
-//                    }
-//                }
+                
             } else if loadedItems.isEmpty {
+                
                 ProgressView("Loading collections...")
+                
             } else {
+                
                 ScrollView {
                     LibraryFilterBar(libraryFilter: $libraryFilter)
                     
@@ -98,19 +92,8 @@ struct LibraryView: View {
                         mangaItem: model.mangaBy(id: item.id)
                     )
                 }
-// MARK: - Para pruebas: permite eliminar todos los Manga de la colección
-//                .toolbar {
-//                    ToolbarItem(placement: .topBarTrailing) {
-//                        Button(role: .destructive) {
-//                            deleteAllItems()
-//                        } label: {
-//                            Image(systemName: "trash")
-//                                .font(.callout)
-//                                .foregroundColor(.red)
-//                        }
-//                    }
-//                }
             }
+            
         } detail: {
             if let selected = selectedItem {
                 LibraryDetailView(libraryItem: selected, mangaItem: model.mangaBy(id: selected.id))
@@ -136,9 +119,16 @@ struct LibraryView: View {
 
             lastCollectionCount = newCollection.count
         }
+        .onChange(of: model.errorMessage) { _, newError in
+            if newError == nil {
+                Task {
+                    loadedItems = []
+                    await fetchDetailsOfAllLibraryItems(for: Array(mangasCollection), batchSize: 10)
+                }
+            }
+        }
     }
     
-//    @MainActor
     private func fetchSingleManga(id: Int) async -> Manga? {
         if model.mangaBy(id: id) == nil {
             await model.fetchMangaIfNeeded(for: id)
@@ -147,12 +137,11 @@ struct LibraryView: View {
     }
     
     private func fetchDetailsOfAllLibraryItems(for items: [LibraryItemDB], batchSize: Int = 10) async {
-        // Evitar tares si no hay nada en la Biblioteca
         guard !items.isEmpty else { return }
 
         // Mapa id -> item (para reconstruir la tupla al final del lote)
         let idToItem = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
-        // Solo IDs para no sacar modelos de SwiftData fuera del MainActor
+        // Solo IDs para no sacar modelo de SwiftData fuera del MainActor
         let ids = items.map { $0.id }
 
         for batch in ids.chunked(into: batchSize) {
@@ -179,30 +168,6 @@ struct LibraryView: View {
             }
         }
     }
-    
-// MARK: - Funciones para pruebas (añadir unos 1.000 Mangas y eliminar todos los Manga de la colección)
-//    private func addThousandItems() {
-//        for manga in model.mangas {
-//            for i in 0..<1000 {
-//                let updatedVolumesOwned = [1]
-//                let newItem = LibraryItemDB(
-//                    id: 1004 + i,
-//                    completeCollection: manga.volumes == updatedVolumesOwned.count,
-//                    volumesOwned: updatedVolumesOwned,
-//                    readingVolume: nil
-//                )
-//                modelContext.insert(newItem)
-//            }
-//        }
-//    }
-//    
-//    private func deleteAllItems() {
-//        withAnimation {
-//            for item in mangasCollection {
-//                modelContext.delete(item)
-//            }
-//        }
-//    }
 }
 
 #Preview("Librería con Manga", traits: .sampleData) {

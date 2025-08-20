@@ -244,12 +244,12 @@ struct LibraryManagementView: View {
     }
 }
 
-#Preview("En Biblioteca, con info API", traits: .sampleData) {
+#Preview("Colección en Biblioteca", traits: .sampleData) {
     LibraryManagementView(
         mangaItem: .testInLibrary)
 }
 
-#Preview("No en Biblioteca") {
+#Preview("Colección nueva") {
     LibraryManagementView(
         mangaItem: .test)
 }
