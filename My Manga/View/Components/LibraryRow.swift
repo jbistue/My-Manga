@@ -12,6 +12,7 @@ struct LibraryRow: View {
     
     let libraryItem: LibraryItemDB
     let mangaItem: Manga?
+    let selected: Bool
     
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
@@ -65,7 +66,7 @@ struct LibraryRow: View {
         }
         .padding(10)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemBackground))
+        .background(Color(selected ? .systemGray4 : .secondarySystemBackground))
         .cornerRadius(10)
         .sheet(isPresented: $isFormPresented) {
             if let manga = mangaItem {
@@ -82,7 +83,16 @@ struct LibraryRow: View {
             completeCollection: false,
             volumesOwned: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
             readingVolume: 4),
-        mangaItem: .test)
+        mangaItem: .test,
+        selected: false)
+    LibraryRow(
+        libraryItem: LibraryItemDB(
+            id: 42,
+            completeCollection: false,
+            volumesOwned: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
+            readingVolume: 4),
+        mangaItem: .test,
+        selected: true)
 }
 
 #Preview("Info del Maga NO disponible ...") {
@@ -92,5 +102,6 @@ struct LibraryRow: View {
             completeCollection: false,
             volumesOwned: [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
             readingVolume: 4),
-        mangaItem: nil)
+        mangaItem: nil,
+        selected: false)
 }

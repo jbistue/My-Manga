@@ -93,7 +93,7 @@ struct StoreView: View {
                             .cornerRadius(10)
                         
                         Button("Retry") {
-                            Task {
+                            Task(priority: .userInitiated) {
                                 if model.demographics.isEmpty {
                                     model.loadMangaClassifications()
                                 }

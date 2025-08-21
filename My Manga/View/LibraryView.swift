@@ -67,12 +67,12 @@ struct LibraryView: View {
                                 Button {
                                     selectedItem = item
                                 } label: {
-                                    LibraryRow(libraryItem: item, mangaItem: manga)
+                                    LibraryRow(libraryItem: item, mangaItem: manga, selected: selectedItem == item)
                                 }
                                 .buttonStyle(.plain)
                             } else {
                                 NavigationLink(value: item) {
-                                    LibraryRow(libraryItem: item, mangaItem: manga)
+                                    LibraryRow(libraryItem: item, mangaItem: manga, selected: false)
                                 }
                             }
                         }
