@@ -135,7 +135,7 @@ struct LibraryDetailView: View {
     }
 }
 
-#Preview {
+#Preview("Info del Maga disponible de la API") {
     LibraryDetailView(
         libraryItem: LibraryItemDB(
             id: 42,
@@ -145,7 +145,7 @@ struct LibraryDetailView: View {
         mangaItem: .test)
 }
 
-#Preview {
+#Preview("Info del Maga NO disponible ...") {
     LibraryDetailView(
         libraryItem: LibraryItemDB(
             id: 42,

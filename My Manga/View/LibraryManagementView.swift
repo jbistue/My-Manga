@@ -9,8 +9,8 @@ import SwiftUI
 import SwiftData
 
 struct LibraryManagementView: View {
-    @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     
     @State private var libraryItem: LibraryItemDB? = nil
     @State private var selectedVolumesToAdd: Set<Int> = []
@@ -38,40 +38,41 @@ struct LibraryManagementView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                Text(mangaItem.title ?? "Unknown Manga")
-                    .font(.title)
-                    .foregroundColor(.primary)
-                    .bold()
-                    .padding(.vertical, 16)
+        NavigationStack {
+            ScrollView {
+                Text(String(localized: "SELECT VOLUMES TO ADD"))
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.leading, 40)
+                    .padding(.top, 20)
                 
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack(alignment: .bottom) {
-                        Text("**Select volumes to add:**")
-                            .font(.callout)
-                            .foregroundColor(.primary)
-                            .multilineTextAlignment(.leading)
-                        
-                        if pendingVolumes.isEmpty {
-                            Text(String(localized: "All volumes owned"))
-                                .foregroundColor(.green)
-                                .multilineTextAlignment(.trailing)
-                        } else {
-                            Button(allSelected ? "Deselect All" : "Select All") {
-                                withAnimation {
-                                    if allSelected {
-                                        selectedVolumesToAdd.removeAll()
-                                        hasChangedVolumesToAdd = false
-                                    } else {
-                                        selectedVolumesToAdd = Set(pendingVolumes)
-                                        hasChangedVolumesToAdd = true
-                                    }
+                VStack(alignment: .center) {
+                    if pendingVolumes.isEmpty {
+                        Text(String(localized: "All volumes owned"))
+                            .foregroundColor(.green)
+                            .multilineTextAlignment(.trailing)
+                            .padding(.horizontal, 20)
+                            .padding(.top, 10)
+                    } else {
+                        Button(allSelected ? "Deselect All" : "Select All") {
+                            withAnimation {
+                                if allSelected {
+                                    selectedVolumesToAdd.removeAll()
+                                    hasChangedVolumesToAdd = false
+                                } else {
+                                    selectedVolumesToAdd = Set(pendingVolumes)
+                                    hasChangedVolumesToAdd = true
                                 }
                             }
-                            .font(.subheadline)
                         }
+                        .font(.subheadline)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 10)
                     }
+                    
+                    Divider()
                     
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 35))], spacing: 10) {
                         ForEach(pendingVolumes, id: \.self) { volume in
@@ -95,21 +96,33 @@ struct LibraryManagementView: View {
                                     .overlay(
                                         Circle().stroke(Color.accentColor, lineWidth: selectedVolumesToAdd.contains(volume) ? 0 : 1)
                                     )
+                                    .padding(.horizontal, 10)
                             }
                             .animation(.easeInOut(duration: 0.2), value: selectedVolumesToAdd)
                         }
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.top, 5)
+                    .padding(.bottom, 15)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(.tertiarySystemBackground))
+                .cornerRadius(10)
+                .padding(.horizontal, 20)
+                .padding(.bottom, 20)
                 
                 if libraryItem != nil {
                     let initialReadingVolume = libraryItem?.readingVolume ?? nil
                     
+                    Text(String(localized: "READING VOLUME"))
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.leading, 40)
+                        .padding(.top, 10)
+                    
                     HStack {
-                        Text("**Reading volume:**")
-                            .font(.callout)
-                            .foregroundColor(.primary)
-                            .multilineTextAlignment(.leading)
-                        
                         Picker("Reading volume:", selection: $itemSelectedToRead) {
                             Text("-").tag(Optional<Int>.none)
                             if let mangasInLibrary = libraryItem{
@@ -161,21 +174,33 @@ struct LibraryManagementView: View {
                         }
                         .font(.subheadline)
                     }
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .background(Color(.tertiarySystemBackground))
+                    .cornerRadius(10)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 20)
+                }
+            }
+            .navigationTitle(mangaItem.title ?? "Unknown Manga")
+            .navigationBarTitleDisplayMode(.inline)
+            .scrollIndicators(.hidden)
+            .background(Color(.secondarySystemBackground))
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button(role: .destructive) {
+                        showDeleteConfirmation = true
+                    } label: {
+                        Image(systemName: "trash")
+                            .foregroundColor(libraryItem == nil ? .gray.opacity(0.4) : .red)
+                    }
+                    .disabled(libraryItem == nil)
                 }
                 
-                HStack {
-                    Button("Remove from Library", role: .destructive) {
-                        showDeleteConfirmation = true
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(libraryItem == nil)
-                    
-                    Button("Done") {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Save") {
                         updateLibrary()
                         dismiss()
                     }
-                    .buttonStyle(.borderedProminent)
                     .disabled(!hasChangedVolumesToAdd && !hasChangedVolumeToRead)
                     .alert("Are you sure?", isPresented: $showDeleteConfirmation) {
                         Button("Delete", role: .destructive) {
@@ -193,13 +218,10 @@ struct LibraryManagementView: View {
                         Text("This Manga will be permanently removed from your library.")
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .center)
             }
-            .padding()
-        }
-        .scrollIndicators(.hidden)
-        .onAppear {
-            loadItem()
+            .onAppear {
+                loadItem()
+            }
         }
     }
     
@@ -207,7 +229,7 @@ struct LibraryManagementView: View {
         let descriptor = FetchDescriptor<LibraryItemDB>(
             predicate: #Predicate { $0.id == mangaItem.id }
         )
-            
+        
         do {
             let results = try modelContext.fetch(descriptor)
             libraryItem = results.first

@@ -13,9 +13,10 @@ struct StoreView: View {
     @State private var lastFilter: String = ""
     @State private var searchText = ""
     @State private var debounceTimer: Timer?
-
+    @State private var showErrorAlert = false
+    
     let namespace: Namespace.ID
-
+    
     init(namespace: Namespace.ID) {
         self.namespace = namespace
     }
@@ -31,8 +32,8 @@ struct StoreView: View {
                                 .onAppear {
                                     guard model.errorMessage == nil else { return }
                                     if let index = model.mangas.firstIndex(where: { $0.id == manga.id }),
-                                        // cuando faltan 6 portadas para el final se cargan más Mangas
-                                        index == model.mangas.count - 6 {
+                                       // cuando faltan 6 portadas para el final se cargan más Mangas
+                                       index == model.mangas.count - 6 {
                                         print("Fetching more mangas...")
                                         Task {
                                             await model.fetchFilteredMangas()
@@ -51,19 +52,19 @@ struct StoreView: View {
             .scrollDismissesKeyboard(.interactively)
             .onChange(of: searchText) { _, newValue in
                 debounceTimer?.invalidate()
-                    
+                
                 if newValue.isEmpty {
                     model.menuLabel = String(localized: "All")
                     model.mangaFilter = "list/mangas"
                     return
                 }
-                    
+                
                 debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
                     DispatchQueue.main.async {
                         model.mangaFilter = "search/mangasContains/\(newValue.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current))"
                     }
                 }
-                    
+                
             }
             .mangaFiltersButton()
             .navigationDestination(for: Manga.self) { manga in
@@ -82,34 +83,34 @@ struct StoreView: View {
                     await model.fetchFilteredMangas()
                 }
             }
-            .overlay(alignment: .bottom) {
-                if let errorMessage = model.errorMessage {
-                    VStack {
-                        Text(errorMessage)
-                            .multilineTextAlignment(.center)
-                            .padding(8)
-                            .background(Color.red.opacity(0.85))
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                        
-                        Button("Retry") {
-                            Task(priority: .userInitiated) {
-                                if model.demographics.isEmpty {
-                                    model.loadMangaClassifications()
-                                }
-                                await model.fetchFilteredMangas()
-                            }
+            .onChange(of: model.errorMessage) { _, newValue in
+                showErrorAlert = (newValue != nil)
+            }
+            .alert("Error", isPresented: $showErrorAlert, presenting: model.errorMessage) { errorMessage in
+                Button("Retry", role: .none) {
+                    Task(priority: .userInitiated) {
+                        if model.demographics.isEmpty {
+                            model.loadMangaClassifications()
                         }
-                        .padding(.top, 4)
-                        .buttonStyle(.borderedProminent)
+                        await model.fetchFilteredMangas()
                     }
-                    .padding()
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
+                Button("Cancel", role: .cancel) { }
+            } message: { errorMessage in
+                Text(errorMessage)
             }
         }
         .task {
             if model.mangas.isEmpty, model.errorMessage == nil {
+                await model.fetchFilteredMangas()
+            }
+        }
+        .refreshable {
+            model.mangas = []
+            model.currentPage = 1
+            model.hasMorePages = true
+            
+            Task {
                 await model.fetchFilteredMangas()
             }
         }

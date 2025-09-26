@@ -8,6 +8,24 @@
 import SwiftUI
 import SwiftData
 
+enum LibraryFilter: String, CaseIterable, Identifiable {
+    case all
+    case reading
+    case complete
+    case incomplete
+    
+    var id: Self { self }
+    
+    var description: String {
+        switch self {
+        case .all: String(localized: "All")
+        case .reading: String(localized: "Reading")
+        case .complete: String(localized: "Complete")
+        case .incomplete: String(localized: "Incomplete")
+        }
+    }
+}
+
 struct LibraryView: View {
     @Environment(\.horizontalSizeClass) private var sizeClass
     @Environment(\.modelContext) private var modelContext
@@ -18,6 +36,7 @@ struct LibraryView: View {
     @State private var loadedItems: [(LibraryItemDB, Manga?)] = []
     @State private var libraryFilter: LibraryFilter = .all
     @State private var searchText = ""
+    @State private var alphabetical = false
     @State private var selectedItem: LibraryItemDB?
     @State private var lastCollectionCount = 0
     
@@ -40,6 +59,14 @@ struct LibraryView: View {
                 guard let title = manga?.title else { return false }
                 return title.localizedStandardContains(searchText)
             }
+            .sorted {
+                if alphabetical {
+                    guard let title0 = $0.1?.title, let title1 = $1.1?.title else { return false }
+                    return title0.localizedStandardCompare(title1) == .orderedAscending
+                } else {
+                    return $0.0.id < $1.0.id
+                }
+            }
     }
     
     var body: some View {
@@ -59,7 +86,17 @@ struct LibraryView: View {
             } else {
                 
                 ScrollView {
-                    LibraryFilterBar(libraryFilter: $libraryFilter)
+//                    LibraryFilterBar(libraryFilter: $libraryFilter)
+                    
+                    Picker("Filter", selection: $libraryFilter) {
+                        ForEach(LibraryFilter.allCases) { option in
+                            Text(option.description).tag(option)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal)
+                    .padding(.bottom, 5)
                     
                     LazyVStack {
                         ForEach(filteredItems, id: \.0.id) { (item, manga) in
@@ -78,12 +115,26 @@ struct LibraryView: View {
                         }
                     }
                     .padding(.horizontal, 16)
+                    .animation(.easeInOut, value: libraryFilter)
                 }
                 .navigationTitle(mangasCollection.isEmpty ? Text("") : Text("Library"))
                 .searchable(text: $searchText, prompt: String(localized: "Search by title"))
                 .textInputAutocapitalization(.never)
                 .disableAutocorrection(true)
                 .scrollDismissesKeyboard(.interactively)
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            withAnimation(.easeInOut(duration: 0.4)) {
+                                alphabetical.toggle()
+                            }
+                        } label: {
+                            Image(systemName: alphabetical ? "numbers" : "textformat.abc")
+                                .font(.subheadline)
+                                .symbolEffect(.bounce, value: alphabetical)
+                        }
+                    }
+                }
                 .onChange(of: libraryFilter) { _, _ in selectedItem = nil }
                 .onChange(of: searchText) { _, _ in selectedItem = nil }
                 .navigationDestination(for: LibraryItemDB.self) { item in
@@ -93,7 +144,6 @@ struct LibraryView: View {
                     )
                 }
             }
-            
         } detail: {
             if let selected = selectedItem {
                 LibraryDetailView(libraryItem: selected, mangaItem: model.mangaBy(id: selected.id))
@@ -125,6 +175,12 @@ struct LibraryView: View {
                     loadedItems = []
                     await fetchDetailsOfAllLibraryItems(for: Array(mangasCollection), batchSize: 10)
                 }
+            }
+        }
+        .refreshable {
+            Task {
+                loadedItems = []
+                await fetchDetailsOfAllLibraryItems(for: Array(mangasCollection), batchSize: 10)
             }
         }
     }
@@ -170,7 +226,7 @@ struct LibraryView: View {
     }
 }
 
-#Preview("Librería con Manga", traits: .sampleData) {
+#Preview("Biblioteca con Manga", traits: .sampleData) {
     @Previewable @State var model = MangaViewModel()
     @Previewable @State var imageModel = AsyncImageViewModel()
     
@@ -179,7 +235,7 @@ struct LibraryView: View {
         .environment(imageModel)
 }
 
-#Preview("Librería vacía") {
+#Preview("Biblioteca vacía") {
     @Previewable @State var model = MangaViewModel()
     @Previewable @State var imageModel = AsyncImageViewModel()
     

@@ -8,6 +8,9 @@
 
 /* Begin PBXFileReference section */
 		19D63D4D2E006B2F00AEC69A /* My Manga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Manga.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		19FE08052E86B4E60086C077 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		19FE08082E86B5CF0086C077 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		19FE080C2E86D6660086C077 /* Notas a la práctica final del SDP '25.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Notas a la práctica final del SDP '25.txt"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +35,7 @@
 		19D63D442E006B2F00AEC69A = {
 			isa = PBXGroup;
 			children = (
+				19FE08042E86B3F10086C077 /* docs */,
 				19D63D4F2E006B2F00AEC69A /* My Manga */,
 				19D63D4E2E006B2F00AEC69A /* Products */,
 			);
@@ -43,6 +47,24 @@
 				19D63D4D2E006B2F00AEC69A /* My Manga.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		19FE08042E86B3F10086C077 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				19FE080C2E86D6660086C077 /* Notas a la práctica final del SDP '25.txt */,
+				19FE08082E86B5CF0086C077 /* README.md */,
+				19FE08052E86B4E60086C077 /* LICENSE */,
+				19FE08072E86B4E60086C077 /* screenshots */,
+			);
+			path = docs;
+			sourceTree = "<group>";
+		};
+		19FE08072E86B4E60086C077 /* screenshots */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = screenshots;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
