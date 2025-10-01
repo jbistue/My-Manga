@@ -9,7 +9,7 @@ My Manga es una aplicación iOS para buscar y gestionar tus colecciones de Manga
 | ![Store](screenshots/store-view.png) | ![Library](screenshots/library-view.png) | ![Detail](screenshots/detail-view.png) |
 | Vista principal del Store | Biblioteca personal | Información detallada |
 
-### 🌓 Modo Oscuro
+### 🌓 iPad, Modo Oscuro
 | Store (Dark) | Library (Dark) |
 |:------------:|:--------------:|
 | ![Store Dark](screenshots/store-dark.png) | ![Library Dark](screenshots/library-dark.png) |
