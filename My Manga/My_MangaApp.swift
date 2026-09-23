@@ -23,14 +23,13 @@ struct My_MangaApp: App {
         }
     }()
 
-    init() {
-        model.loadMangaClassifications()
-    }
-    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(model)
+                .task {
+                    model.loadMangaClassifications()
+                }
         }
         .modelContainer(sharedModelContainer)
     }
